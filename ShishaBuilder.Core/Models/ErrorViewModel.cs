@@ -1,4 +1,4 @@
-namespace ShishaBuilder.Web.Models;
+namespace ShishaBuilder.Core.Models;
 
 public class ErrorViewModel
 {

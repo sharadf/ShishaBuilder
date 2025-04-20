@@ -1,0 +1,56 @@
+@model ShishaBuilder.Core.Dtos.EditTobaccoViewModel
+
+@{
+    ViewData["Title"] = "Edit Tobacco";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="@ViewBag.TobaccoId" />
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Brand"></label>
+        <input asp-for="Brand" class="form-control" />
+        <span asp-validation-for="Brand" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Flavor"></label>
+        <input asp-for="Flavor" class="form-control" />
+        <span asp-validation-for="Flavor" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Strength"></label>
+        <select asp-for="Strength" class="form-control" asp-items="new SelectList(ViewBag.StrengthLevels)">
+            <option value="">-- Select strength --</option>
+        </select>
+        <span asp-validation-for="Strength" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Current Image:</label><br />
+        <img src="@ViewBag.ExistingImage" alt="Image" width="150" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ImageFile">Change Image</label>
+        <input asp-for="ImageFile" class="form-control-file" type="file" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+    <br>
+    <br>
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="AllTobaccos" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
