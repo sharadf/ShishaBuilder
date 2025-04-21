@@ -1,0 +1,49 @@
+@model IEnumerable<ShishaBuilder.Core.Models.Hookah>
+
+@{
+    ViewData["Title"] = "All Hookahs";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>@(ViewBag.ShowDeleted == true ? "Deleted Hookahs" : "All Hookahs")</h2>
+
+    @if (ViewBag.ShowDeleted == true)
+    {
+        <a asp-action="AllHookahs" class="btn btn-outline-primary">
+            Show Active
+        </a>
+    }
+    else
+    {
+        <a asp-action="DeletedHookahs" class="btn btn-outline-secondary">
+            Show Deleted
+        </a>
+    }
+</div>
+
+<div class="row">
+    @foreach (var hookah in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="@hookah.Image" class="card-img-top" alt="@hookah.ModelName" style="height: 200px; object-fit: cover;" />
+                <div class="card-body">
+                    <h5 class="card-title">@hookah.ModelName</h5>
+                    <p class="card-text"><strong>Company name:</strong> @hookah.CompanyName</p>
+                    @if(ViewBag.ShowDeleted != true)
+                    {
+                        <div class="d-flex justify-content-between">
+                            <!-- Edit button -->
+                            <a asp-action="Edit" asp-route-id="@hookah.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <!-- Soft delete button -->
+                            <form asp-action="SoftDelete" method="post" asp-route-id="@hookah.Id" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

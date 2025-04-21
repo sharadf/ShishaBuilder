@@ -1,0 +1,42 @@
+@model ShishaBuilder.Core.DTOs.EditHookah
+
+@{
+    ViewData["Title"] = "Edit Hookah";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="@ViewBag.HookahId" />
+
+    <div class="form-group">
+        <label asp-for="ModelName"></label>
+        <input asp-for="ModelName" class="form-control" />
+        @* <span asp-validation-for="ModelName" class="text-danger"></span> *@
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CompanyName"></label>
+        <input asp-for="CompanyName" class="form-control" />
+        @* <span asp-validation-for="CompanyName" class="text-danger"></span> *@
+    </div>
+
+    <div class="form-group">
+        <label>Current Image:</label><br />
+        <img src="@ViewBag.ExistingImage" alt="Image" width="150" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ImageFile">Change Image</label>
+        <input asp-for="ImageFile" class="form-control-file" type="file" />
+        @* <span asp-validation-for="ImageFile" class="text-danger"></span> *@
+    </div>
+    <br>
+    <br>
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="AllHookahs" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

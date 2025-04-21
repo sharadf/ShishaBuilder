@@ -1,0 +1,33 @@
+@model ShishaBuilder.Core.DTOs.CreateHookah
+
+@{
+    ViewData["Title"] = "Add Hookah";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="ModelName"></label>
+        <input asp-for="ModelName" class="form-control" />
+        @* <span asp-validation-for="ModelName" class="text-danger"></span> *@
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CompanyName"></label>
+        <input asp-for="CompanyName" class="form-control" />
+        @* <span asp-validation-for="CompanyName" class="text-danger"></span> *@
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ImageFile">Image</label>
+        <input asp-for="ImageFile" class="form-control-file" type="file" />
+        @* <span asp-validation-for="ImageFile" class="text-danger"></span> *@
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
