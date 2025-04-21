@@ -2,7 +2,190 @@
 
 @{
     ViewData["Title"] = "All Hookahs";
+    var showDeleted = ViewBag.ShowDeleted == true;
 }
+
+<style>
+    :root {
+        --primary-color: #4e73df;
+        --secondary-color: #858796;
+        --danger-color: #e74a3b;
+        --warning-color: #f6c23e;
+        --light-color: #f8f9fc;
+        --dark-color: #5a5c69;
+        --transition-speed: 0.3s;
+    }
+
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        color: var(--dark-color);
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all var(--transition-speed) ease;
+        background-color: white;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-img-top {
+        transition: transform var(--transition-speed) ease;
+    }
+
+    .card:hover .card-img-top {
+        transform: scale(1.03);
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .card-title {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 0.75rem;
+    }
+
+    .card-text {
+        color: var(--secondary-color);
+        margin-bottom: 1.5rem;
+    }
+
+    .btn {
+        border-radius: 50px;
+        padding: 0.375rem 1rem;
+        font-weight: 600;
+        transition: all var(--transition-speed) ease;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-outline-primary {
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+    }
+
+    .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .btn-outline-secondary {
+        border: 2px solid var(--secondary-color);
+        color: var(--secondary-color);
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: var(--secondary-color);
+        color: white;
+    }
+
+    .btn-warning {
+        background-color: var(--warning-color);
+        border-color: var(--warning-color);
+        color: white;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0b230;
+        border-color: #e0b230;
+    }
+
+    .btn-danger {
+        background-color: var(--danger-color);
+        border-color: var(--danger-color);
+    }
+
+    .btn-danger:hover {
+        background-color: #d62c1a;
+        border-color: #d62c1a;
+    }
+
+    h2 {
+        color: var(--dark-color);
+        font-weight: 700;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+    }
+
+    h2::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background-color: var(--primary-color);
+        transition: width var(--transition-speed) ease;
+    }
+
+    h2:hover::after {
+        width: 100%;
+    }
+
+    .d-flex.justify-content-between {
+        margin-bottom: 2rem;
+    }
+
+    .form-control {
+        border-radius: 50px;
+        padding: 0.5rem 1rem;
+        border: 1px solid #d1d3e2;
+        transition: all var(--transition-speed) ease;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+
+    /* Анимация появления карточек */
+    .col-md-4 {
+        animation: fadeIn 0.5s ease forwards;
+        opacity: 0;
+    }
+
+    @@keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+
+    .col-md-4:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .col-md-4:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .col-md-4:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .col-md-4:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+
+    .col-md-4:nth-child(5) {
+        animation-delay: 0.5s;
+    }
+
+    .col-md-4:nth-child(6) {
+        animation-delay: 0.6s;
+    }
+</style>
+
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>@(ViewBag.ShowDeleted == true ? "Deleted Hookahs" : "All Hookahs")</h2>
@@ -26,11 +209,12 @@
     {
         <div class="col-md-4 mb-4">
             <div class="card">
-                <img src="@hookah.Image" class="card-img-top" alt="@hookah.ModelName" style="height: 200px; object-fit: cover;" />
+                <img src="@hookah.Image" class="card-img-top" alt="@hookah.ModelName"
+                    style="height: 200px; object-fit: cover;" />
                 <div class="card-body">
                     <h5 class="card-title">@hookah.ModelName</h5>
                     <p class="card-text"><strong>Company name:</strong> @hookah.CompanyName</p>
-                    @if(ViewBag.ShowDeleted != true)
+                    @if (ViewBag.ShowDeleted != true)
                     {
                         <div class="d-flex justify-content-between">
                             <!-- Edit button -->
@@ -46,4 +230,3 @@
         </div>
     }
 </div>
-

@@ -4,29 +4,44 @@
     ViewData["Title"] = "Add Hookah";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg rounded-4 border-0">
+                <div class="card-header bg-dark text-white text-center rounded-top-4">
+                    <h2 class="mb-0">@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div class="mb-4">
+                            <label asp-for="ModelName" class="form-label fw-semibold">Model Name</label>
+                            <input asp-for="ModelName" class="form-control form-control-lg rounded-3 shadow-sm" placeholder="Enter model name" />
+                            <span asp-validation-for="ModelName" class="text-danger small"></span>
+                        </div>
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label asp-for="ModelName"></label>
-        <input asp-for="ModelName" class="form-control" />
-        @* <span asp-validation-for="ModelName" class="text-danger"></span> *@
-    </div>
+                        <div class="mb-4">
+                            <label asp-for="CompanyName" class="form-label fw-semibold">Company Name</label>
+                            <input asp-for="CompanyName" class="form-control form-control-lg rounded-3 shadow-sm" placeholder="Enter company name" />
+                            <span asp-validation-for="CompanyName" class="text-danger small"></span>
+                        </div>
 
-    <div class="form-group">
-        <label asp-for="CompanyName"></label>
-        <input asp-for="CompanyName" class="form-control" />
-        @* <span asp-validation-for="CompanyName" class="text-danger"></span> *@
-    </div>
+                        <div class="mb-4">
+                            <label asp-for="ImageFile" class="form-label fw-semibold">Upload Image</label>
+                            <input asp-for="ImageFile" class="form-control form-control-lg rounded-3 shadow-sm" type="file" />
+                            <span asp-validation-for="ImageFile" class="text-danger small"></span>
+                        </div>
 
-    <div class="form-group">
-        <label asp-for="ImageFile">Image</label>
-        <input asp-for="ImageFile" class="form-control-file" type="file" />
-        @* <span asp-validation-for="ImageFile" class="text-danger"></span> *@
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill shadow-sm">
+                                <i class="bi bi-cloud-upload-fill me-2"></i> Add Hookah
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <br>
-    <button type="submit" class="btn btn-primary">Create</button>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

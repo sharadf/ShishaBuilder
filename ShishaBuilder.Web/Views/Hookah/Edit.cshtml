@@ -4,38 +4,46 @@
     ViewData["Title"] = "Edit Hookah";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4 fw-bold text-success">@ViewData["Title"]</h2>
 
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="id" value="@ViewBag.HookahId" />
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="@ViewBag.HookahId" />
 
-    <div class="form-group">
-        <label asp-for="ModelName"></label>
-        <input asp-for="ModelName" class="form-control" />
-        @* <span asp-validation-for="ModelName" class="text-danger"></span> *@
+                        <div class="mb-3">
+                            <label asp-for="ModelName" class="form-label fw-semibold"></label>
+                            <input asp-for="ModelName" class="form-control form-control-lg" placeholder="Enter model name" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CompanyName" class="form-label fw-semibold"></label>
+                            <input asp-for="CompanyName" class="form-control form-control-lg" placeholder="Enter company name" />
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Current Image:</label><br />
+                            <img src="@ViewBag.ExistingImage" alt="Image" class="img-thumbnail shadow-sm mt-2" style="max-width: 200px;" />
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="ImageFile" class="form-label fw-semibold">Change Image</label>
+                            <input asp-for="ImageFile" class="form-control" type="file" />
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-success px-4 py-2">💾 Save Changes</button>
+                            <a asp-action="AllHookahs" class="btn btn-outline-secondary px-4 py-2">↩ Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="CompanyName"></label>
-        <input asp-for="CompanyName" class="form-control" />
-        @* <span asp-validation-for="CompanyName" class="text-danger"></span> *@
-    </div>
-
-    <div class="form-group">
-        <label>Current Image:</label><br />
-        <img src="@ViewBag.ExistingImage" alt="Image" width="150" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="ImageFile">Change Image</label>
-        <input asp-for="ImageFile" class="form-control-file" type="file" />
-        @* <span asp-validation-for="ImageFile" class="text-danger"></span> *@
-    </div>
-    <br>
-    <br>
-    <button type="submit" class="btn btn-success">Save</button>
-    <a asp-action="AllHookahs" class="btn btn-secondary">Cancel</a>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
