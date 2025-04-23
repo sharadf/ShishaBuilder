@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "HC+g0SYwfe3OmvhscNaPlN85HzD8y2HEUWQu5B3jNVmSCB0ZHg7KyBh+XFkzgq3s00m68XA9u8oLa3rSxfQooQ==",
+  "dgSpecHash": "kO0+JUyJCsWOAG6Ld7mAs9wp9af7GfRvD/Jq+zhui+B+xI7kHkBQit4zf/Ltw5nOWjh/lrQxoB/5BuzZTXLjdA==",
   "success": true,
   "projectFilePath": "C:\\Users\\saraf\\OneDrive\\Documents\\ShishaBuilder\\ShishaBuilder.Business\\ShishaBuilder.Business.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,9 @@
     "C:\\Users\\saraf\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
     "C:\\Users\\saraf\\.nuget\\packages\\azure.storage.blobs\\12.24.0\\azure.storage.blobs.12.24.0.nupkg.sha512",
     "C:\\Users\\saraf\\.nuget\\packages\\azure.storage.common\\12.23.0\\azure.storage.common.12.23.0.nupkg.sha512",
+    "C:\\Users\\saraf\\.nuget\\packages\\fluentvalidation\\11.5.1\\fluentvalidation.11.5.1.nupkg.sha512",
+    "C:\\Users\\saraf\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
+    "C:\\Users\\saraf\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.5.1\\fluentvalidation.dependencyinjectionextensions.11.5.1.nupkg.sha512",
     "C:\\Users\\saraf\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\saraf\\.nuget\\packages\\microsoft.aspnetcore.http\\2.3.0\\microsoft.aspnetcore.http.2.3.0.nupkg.sha512",
     "C:\\Users\\saraf\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.3.0\\microsoft.aspnetcore.http.abstractions.2.3.0.nupkg.sha512",

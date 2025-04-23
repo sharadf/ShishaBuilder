@@ -17,11 +17,13 @@
                         <div class="mb-3">
                             <label asp-for="ModelName" class="form-label fw-semibold"></label>
                             <input asp-for="ModelName" class="form-control form-control-lg" placeholder="Enter model name" />
+                            <span class="text-danger" asp-validation-for="ModelName"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="CompanyName" class="form-label fw-semibold"></label>
                             <input asp-for="CompanyName" class="form-control form-control-lg" placeholder="Enter company name" />
+                            <span class="text-danger" asp-validation-for="CompanyName"></span>
                         </div>
 
                         <div class="mb-4">

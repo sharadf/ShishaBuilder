@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "JFfzcsr3ERtrZc6JlhGPRmCexQclmssfbvB7U933Lnhf2L/B3RrhBbabEcvHpQb52R6Tlflcn/qMjfkdSJyHdw==",
+  "dgSpecHash": "BBasCbq7fSUB5FMoN3ZeCRBnQ4WCVnfMaykdU+JYRJYxvyrrUOy0fsQPL1hArLovR76ZkeLUl468i6PSowRgjA==",
   "success": true,
   "projectFilePath": "C:\\Users\\saraf\\OneDrive\\Documents\\ShishaBuilder\\ShishaBuilder.Core\\ShishaBuilder.Core.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\saraf\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\saraf\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
+    "C:\\Users\\saraf\\.nuget\\packages\\fluentvalidation\\11.5.1\\fluentvalidation.11.5.1.nupkg.sha512",
+    "C:\\Users\\saraf\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
+    "C:\\Users\\saraf\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.5.1\\fluentvalidation.dependencyinjectionextensions.11.5.1.nupkg.sha512",
     "C:\\Users\\saraf\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\saraf\\.nuget\\packages\\microsoft.aspnetcore.http\\2.3.0\\microsoft.aspnetcore.http.2.3.0.nupkg.sha512",
     "C:\\Users\\saraf\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.3.0\\microsoft.aspnetcore.http.abstractions.2.3.0.nupkg.sha512",
