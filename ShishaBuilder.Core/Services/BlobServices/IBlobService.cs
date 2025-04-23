@@ -8,8 +8,7 @@ namespace ShishaBuilder.Core.Services.BlobServices;
 
 public interface IBlobService
 {
-    public Task<string> UploadPhotoAsync(IFormFile file);
-    public Task<List<string>> DownloadAllPhotos();
+    Task<string> UploadPhotoAsync(IFormFile file, string containerName);
+    Task<List<string>> DownloadAllPhotos(string containerName);
     
-
 }
