@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using ShishaBuilder.Web.Models;
+using ShishaBuilder.Core.Models;
 
 namespace ShishaBuilder.Web.Controllers;
 

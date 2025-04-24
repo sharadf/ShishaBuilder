@@ -1,0 +1,50 @@
+@model IEnumerable<ShishaBuilder.Core.Models.Tobacco>
+
+@{
+    ViewData["Title"] = "All Tobaccos";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>@(ViewBag.ShowDeleted == true ? "Deleted Masters" : "All Tobaccos")</h2>
+
+    @if (ViewBag.ShowDeleted == true)
+    {
+        <a asp-action="AllTobaccos" class="btn btn-outline-primary">
+            Show Active
+        </a>
+    }
+    else
+    {
+        <a asp-action="DeletedTobaccos" class="btn btn-outline-secondary">
+            Show Deleted
+        </a>
+    }
+</div>
+
+<div class="row">
+    @foreach (var tobacco in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="@tobacco.ImageUrl" class="card-img-top" alt="@tobacco.Name" style="height: 200px; object-fit: cover;" />
+                <div class="card-body">
+                    <h5 class="card-title">@tobacco.Name</h5>
+                    <p class="card-text"><strong>Brand:</strong> @tobacco.Brand</p>
+                    <p class="card-text"><strong>Flavor:</strong> @tobacco.Flavor</p>
+                    <p class="card-text"><strong>Strength:</strong> @tobacco.Strength</p>
+                    @if(ViewBag.ShowDeleted != true)
+                    {
+                        <div class="d-flex justify-content-between">
+                            <!-- Edit button -->
+                            <a asp-action="Edit" asp-route-id="@tobacco.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <!-- Soft delete button -->
+                            <form asp-action="SoftDelete" method="post" asp-route-id="@tobacco.Id" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,18 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
-using ShishaBuilder.Core.DTOs;
+using ShishaBuilder.Core.DTOs.HookahDtos;
 using ShishaBuilder.Core.Models;
-using System.Net;
 
 namespace ShishaBuilder.Web.Controllers
 {
 
     [Route("[controller]")]
 
+   
     public class HookahController : Controller
     {
         private readonly IHookahService hookahService;
         private readonly IBlobService blobService;
 
+        string containerName= "images";
         public HookahController(IHookahService hookahService, IBlobService blobService)
         {
             this.hookahService = hookahService;
@@ -42,13 +43,14 @@ namespace ShishaBuilder.Web.Controllers
         {
             return View();
         }
+        
         [HttpPost("Create")]
         public async Task<ActionResult> Create([FromForm] CreateHookah hookahDto)
         {
             string imageUrl = string.Empty;
 
             if (hookahDto.ImageFile != null)
-                imageUrl = await blobService.UploadFileAsync(hookahDto.ImageFile);
+                imageUrl = await blobService.UploadPhotoAsync(hookahDto.ImageFile,containerName);
 
             var hookah = new Hookah
             {
@@ -97,7 +99,7 @@ namespace ShishaBuilder.Web.Controllers
 
             if (model.ImageFile != null && model.ImageFile.Length > 0)
             {
-                var imageUrl = await blobService.UploadFileAsync(model.ImageFile);
+                var imageUrl = await blobService.UploadPhotoAsync(model.ImageFile,containerName);
                 hookah.Image = imageUrl;
             }
 
