@@ -1,0 +1,15 @@
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\bin\Debug\net8.0\ShishaBuilder.Core.deps.json
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\bin\Debug\net8.0\ShishaBuilder.Core.runtimeconfig.json
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\bin\Debug\net8.0\ShishaBuilder.Core.dll
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\bin\Debug\net8.0\ShishaBuilder.Core.pdb
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\ShishaBuilder.Core.csproj.AssemblyReference.cache
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\ShishaBuilder.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\ShishaBuilder.Core.AssemblyInfoInputs.cache
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\ShishaBuilder.Core.AssemblyInfo.cs
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\ShishaBuilder.Core.csproj.CoreCompileInputs.cache
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\ShishaBuilder.Core.sourcelink.json
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\ShishaBuilder.Core.dll
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\refint\ShishaBuilder.Core.dll
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\ShishaBuilder.Core.pdb
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\ShishaBuilder.Core.genruntimeconfig.cache
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\ref\ShishaBuilder.Core.dll

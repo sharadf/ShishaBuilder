@@ -1,0 +1,51 @@
+@model ShishaBuilder.Core.DTOs.HookahDtos.CreateHookah
+
+@{
+    ViewData["Title"] = "Add Hookah";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg rounded-4 border-0">
+                <div class="card-header bg-dark text-white text-center rounded-top-4">
+                    <h2 class="mb-0">@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div class="mb-4">
+                            <label asp-for="ModelName" class="form-label fw-semibold">Model Name</label>
+                            <input asp-for="ModelName" class="form-control form-control-lg rounded-3 shadow-sm"
+                                placeholder="Enter model name" />
+                            <span class="text-danger" asp-validation-for="ModelName"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="CompanyName" class="form-label fw-semibold">Company Name</label>
+                            <input asp-for="CompanyName" class="form-control form-control-lg rounded-3 shadow-sm"
+                                placeholder="Enter company name" />
+                            <span class="text-danger" asp-validation-for="CompanyName"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="ImageFile" class="form-label fw-semibold">Upload Image</label>
+                            <input asp-for="ImageFile" class="form-control form-control-lg rounded-3 shadow-sm"
+                                type="file" />
+                            <span class="text-danger" asp-validation-for="ImageFile"></span>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill shadow-sm">
+                                <i class="bi bi-cloud-upload-fill me-2"></i> Add Hookah
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
