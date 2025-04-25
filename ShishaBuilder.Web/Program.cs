@@ -69,6 +69,12 @@ builder.Services.AddFluentValidationAutoValidation()
 builder.Services
     .AddValidatorsFromAssemblyContaining<CreateTobaccoViewModelValidator>();
 
+builder.Services.AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters();
+
+builder.Services
+    .AddValidatorsFromAssemblyContaining<CreateTobaccoViewModelValidator>();
+
 var app = builder.Build();
 
 
