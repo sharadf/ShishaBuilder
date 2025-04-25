@@ -3,7 +3,7 @@ using ShishaBuilder.Core.Models;
 
 namespace ShishaBuilder.Core.DB;
 
-public class AppDbContext :DbContext
+public class AppDbContext : DbContext
 {
     public DbSet<Tobacco> Tobaccos { get; set; }
     public DbSet<Master> Masters { get; set; }

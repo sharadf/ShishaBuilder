@@ -46,12 +46,36 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9va2FoXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/saraf/OneDrive/Documents/ShishaBuilder/ShishaBuilder.Web/Views/Master/AllMasters.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFzdGVyXEFsbE1hc3RlcnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saraf/OneDrive/Documents/ShishaBuilder/ShishaBuilder.Web/Views/Master/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFzdGVyXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saraf/OneDrive/Documents/ShishaBuilder/ShishaBuilder.Web/Views/Master/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFzdGVyXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/saraf/OneDrive/Documents/ShishaBuilder/ShishaBuilder.Web/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/saraf/OneDrive/Documents/ShishaBuilder/ShishaBuilder.Web/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saraf/OneDrive/Documents/ShishaBuilder/ShishaBuilder.Web/Views/Tobacco/AllTobaccos.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVG9iYWNjb1xBbGxUb2JhY2Nvcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saraf/OneDrive/Documents/ShishaBuilder/ShishaBuilder.Web/Views/Tobacco/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVG9iYWNjb1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saraf/OneDrive/Documents/ShishaBuilder/ShishaBuilder.Web/Views/Tobacco/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVG9iYWNjb1xFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/saraf/OneDrive/Documents/ShishaBuilder/ShishaBuilder.Web/Views/_ViewImports.cshtml]

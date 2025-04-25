@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ShishaBuilder.Business")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7db38d1f5488dedb435c4690a36f72d3ce364400")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+98c865a264d7aa09439594509cd5ff6f947f7544")]
 [assembly: System.Reflection.AssemblyProductAttribute("ShishaBuilder.Business")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ShishaBuilder.Business")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
