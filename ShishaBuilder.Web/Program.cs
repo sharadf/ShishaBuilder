@@ -97,12 +97,4 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-
-
 app.Run();
-// ToDo 
-//     Dobavit knopku deleted masters ,
-//     Dobavit Nomer telefona k modeli master,
-//     Dobavit Validatori,
-//     Sdelat tak ctob v edit master on ne mog izmenyat pole Name , Telefon Num
-//     Dobavit emu list zakazov (esli na tot moment sharaf zakoncit svoyu rabotu)
