@@ -11,8 +11,8 @@ using ShishaBuilder.Core.DB;
 namespace ShishaBuilder.Core.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250419234220_AddIsDeletedToTobaccos")]
-    partial class AddIsDeletedToTobaccos
+    [Migration("20250425170016_RecreateMigrations")]
+    partial class RecreateMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,37 @@ namespace ShishaBuilder.Core.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("ShishaBuilder.Core.Models.Master", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhotoUrl")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Masters");
+                });
 
             modelBuilder.Entity("ShishaBuilder.Core.Models.Tobacco", b =>
                 {
@@ -49,6 +80,7 @@ namespace ShishaBuilder.Core.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Strength")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");

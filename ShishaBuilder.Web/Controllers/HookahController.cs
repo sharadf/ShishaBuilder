@@ -13,7 +13,7 @@ namespace ShishaBuilder.Web.Controllers
         private readonly IHookahService hookahService;
         private readonly IBlobService blobService;
 
-        string containerName= "images";
+        string containerName= "hookahs";
         public HookahController(IHookahService hookahService, IBlobService blobService)
         {
             this.hookahService = hookahService;
