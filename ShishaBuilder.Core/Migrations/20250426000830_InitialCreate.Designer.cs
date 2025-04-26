@@ -11,8 +11,8 @@ using ShishaBuilder.Core.Data;
 namespace ShishaBuilder.Core.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250420181335_addIsDelete")]
-    partial class addIsDelete
+    [Migration("20250426000830_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,9 @@ namespace ShishaBuilder.Core.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ModelName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -47,6 +50,28 @@ namespace ShishaBuilder.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Hookahs");
+                });
+
+            modelBuilder.Entity("ShishaBuilder.Core.Models.Table", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsBusy")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TableNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tables");
                 });
 #pragma warning restore 612, 618
         }

@@ -2,8 +2,8 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using ShishaBuilder.Core.Services.BlobServices;
 using ShishaBuilder.Core.Settings;
+
 namespace ShishaBuilder.Business.Services.BlobServices;
 
 public class BlobService : IBlobService
