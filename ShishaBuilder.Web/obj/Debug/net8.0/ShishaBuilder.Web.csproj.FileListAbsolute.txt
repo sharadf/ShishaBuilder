@@ -33,7 +33,6 @@ C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Web\bin\Debug\net8
 C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Web\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
 C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Web\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
 C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Web\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
-C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Web\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
 C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Web\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Web\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
 C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Web\bin\Debug\net8.0\Microsoft.Identity.Client.dll
@@ -183,3 +182,5 @@ C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Web\obj\Debug\net8
 C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Web\bin\Debug\net8.0\FluentValidation.dll
 C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Web\bin\Debug\net8.0\FluentValidation.AspNetCore.dll
 C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Web\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Web\bin\Debug\net8.0\Npgsql.dll
+C:\Users\saraf\OneDrive\Documents\ShishaBuilder\ShishaBuilder.Web\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll

@@ -3,12 +3,12 @@ using ShishaBuilder.Core.DTOs.HookahDtos;
 
 namespace ShishaBuilder.Core.Validation.HookahValidations;
 
-public class EditookahValidator : AbstractValidator<EditHookah>
+public class EditHookahValidator : AbstractValidator<EditHookah>
 {
     private int modelNameLength = 30;
     private int companyNameLength = 30;
 
-    public EditookahValidator()
+    public EditHookahValidator ()
     {
         RuleFor((CreatedHookah) => CreatedHookah.ModelName)
             .NotEmpty()

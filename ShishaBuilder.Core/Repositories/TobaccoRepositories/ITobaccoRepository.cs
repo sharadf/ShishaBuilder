@@ -12,5 +12,4 @@ public interface ITobaccoRepository
     Task <Tobacco?> GetTobaccoByIdAsync(int id);
     Task UpdateTobaccoAsync(Tobacco tobacco);
     Task AddTobaccoAsync(Tobacco tobacco);
-
 }

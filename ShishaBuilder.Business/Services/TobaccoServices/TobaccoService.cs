@@ -14,11 +14,12 @@ public class TobaccoService : ITobaccoService
 
     public TobaccoService(ITobaccoRepository tobaccoRepository)
     {
-        this.tobaccoRepository=tobaccoRepository;
+        this.tobaccoRepository = tobaccoRepository;
     }
+
     public async Task AddTobaccoAsync(Tobacco tobacco)
     {
-        if (tobacco==null)
+        if (tobacco == null)
         {
             throw new ArgumentNullException(nameof(tobacco), "Tobacco cannot be null.");
         }
@@ -27,21 +28,17 @@ public class TobaccoService : ITobaccoService
 
     public async Task<IEnumerable<Tobacco>> GetAllTobaccosAsync()
     {
-        var all= await tobaccoRepository.GetAllTobaccosAsync();
+        var all = await tobaccoRepository.GetAllTobaccosAsync();
 
-        return all
-            .Where(t=>t.IsDeleted==false);
+        return all.Where(t => t.IsDeleted == false);
     }
 
     public async Task<IEnumerable<Tobacco>> GetAllDeletedTobaccosAsync()
     {
-        var all= await tobaccoRepository.GetAllTobaccosAsync();
+        var all = await tobaccoRepository.GetAllTobaccosAsync();
 
-        return all
-            .Where(t=>t.IsDeleted==true);
+        return all.Where(t => t.IsDeleted == true);
     }
-
-
 
     public async Task<Tobacco?> GetTobaccoByIdAsync(int id)
     {
