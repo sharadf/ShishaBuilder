@@ -4,16 +4,15 @@ using ShishaBuilder.Core.Models;
 
 namespace ShishaBuilder.Web.Controllers
 {
-
     [Route("[controller]")]
-
-   
     public class HookahController : Controller
     {
         private readonly IHookahService hookahService;
         private readonly IBlobService blobService;
 
-        string containerName= "hookahs";
+        private string containerName="hookahs";
+
+
         public HookahController(IHookahService hookahService, IBlobService blobService)
         {
             this.hookahService = hookahService;
@@ -26,7 +25,6 @@ namespace ShishaBuilder.Web.Controllers
             var hookahs = await hookahService.GetAllHookahsAsync();
             return View(hookahs);
         }
-
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Hookah>> GetById(int id)
@@ -43,26 +41,25 @@ namespace ShishaBuilder.Web.Controllers
         {
             return View();
         }
-        
+
         [HttpPost("Create")]
         public async Task<ActionResult> Create([FromForm] CreateHookah hookahDto)
         {
             string imageUrl = string.Empty;
-
+           
             if (hookahDto.ImageFile != null)
-                imageUrl = await blobService.UploadPhotoAsync(hookahDto.ImageFile,containerName);
+                imageUrl = await blobService.UploadPhotoAsync(hookahDto.ImageFile, containerName);
 
             var hookah = new Hookah
             {
                 ModelName = hookahDto.ModelName,
                 CompanyName = hookahDto.CompanyName,
-                Image = imageUrl
+                Image = imageUrl,
             };
 
             await hookahService.AddHookahAsync(hookah);
             return RedirectToAction("AllHookahs");
         }
-
 
         [HttpGet("Edit")]
         public async Task<IActionResult> Edit(int id)
@@ -76,7 +73,7 @@ namespace ShishaBuilder.Web.Controllers
             var model = new EditHookah
             {
                 ModelName = hookah.ModelName,
-                CompanyName = hookah.CompanyName
+                CompanyName = hookah.CompanyName,
             };
 
             ViewBag.HookahId = hookah.Id;
@@ -99,7 +96,7 @@ namespace ShishaBuilder.Web.Controllers
 
             if (model.ImageFile != null && model.ImageFile.Length > 0)
             {
-                var imageUrl = await blobService.UploadPhotoAsync(model.ImageFile,containerName);
+                var imageUrl = await blobService.UploadPhotoAsync(model.ImageFile, containerName);
                 hookah.Image = imageUrl;
             }
 
@@ -107,7 +104,6 @@ namespace ShishaBuilder.Web.Controllers
 
             return RedirectToAction("AllHookahs");
         }
-
 
         [HttpGet("DeletedHookahs")]
         public async Task<IActionResult> DeletedHookahs()
@@ -125,4 +121,3 @@ namespace ShishaBuilder.Web.Controllers
         }
     }
 }
-

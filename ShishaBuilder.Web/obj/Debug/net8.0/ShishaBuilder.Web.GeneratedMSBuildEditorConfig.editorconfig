@@ -60,12 +60,48 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFzdGVyXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/acer/OneDrive/Документы/ShishaBuilder/ShishaBuilder.Web/Views/Order/AllOrders.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcQWxsT3JkZXJzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/acer/OneDrive/Документы/ShishaBuilder/ShishaBuilder.Web/Views/Order/OrderDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcT3JkZXJEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/acer/OneDrive/Документы/ShishaBuilder/ShishaBuilder.Web/Views/Order/OrderSuccess.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcT3JkZXJTdWNjZXNzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/acer/OneDrive/Документы/ShishaBuilder/ShishaBuilder.Web/Views/Order/PreviewOrder.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcUHJldmlld09yZGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/acer/OneDrive/Документы/ShishaBuilder/ShishaBuilder.Web/Views/Order/SelectHookah.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcU2VsZWN0SG9va2FoLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/acer/OneDrive/Документы/ShishaBuilder/ShishaBuilder.Web/Views/Order/SelectTobacco.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcU2VsZWN0VG9iYWNjby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/acer/OneDrive/Документы/ShishaBuilder/ShishaBuilder.Web/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/acer/OneDrive/Документы/ShishaBuilder/ShishaBuilder.Web/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/acer/OneDrive/Документы/ShishaBuilder/ShishaBuilder.Web/Views/Table/AllTables.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFibGVcQWxsVGFibGVzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/acer/OneDrive/Документы/ShishaBuilder/ShishaBuilder.Web/Views/Table/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFibGVcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/acer/OneDrive/Документы/ShishaBuilder/ShishaBuilder.Web/Views/Table/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFibGVcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/acer/OneDrive/Документы/ShishaBuilder/ShishaBuilder.Web/Views/Tobacco/AllTobaccos.cshtml]

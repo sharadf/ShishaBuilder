@@ -1,0 +1,65 @@
+@model ShishaBuilder.Core.DTOs.TableDtos.CreateTable
+
+@{
+    ViewData["Title"] = "Add Table";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg rounded-4 border-0">
+                <div class="card-header bg-dark text-white text-center rounded-top-4">
+                    <h2 class="mb-0">@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        <div class="mb-4">
+                            <label asp-for="TableNumber" class="form-label fw-semibold">Table Number</label>
+                            <input asp-for="TableNumber" class="form-control form-control-lg rounded-3 shadow-sm" placeholder="Enter table number" />
+                            <span class="text-danger" asp-validation-for="TableNumber"></span>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill shadow-sm">
+                                <i class="bi bi-plus-circle-fill me-2"></i> Add Table
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function toggleStatus() {
+            const btn = document.getElementById("statusBtn");
+            const input = document.querySelector("input[name='IsBusy']");
+
+            if (input.value === "False") {
+                input.value = "True";
+                btn.classList.remove("btn-success");
+                btn.classList.add("btn-danger");
+                btn.textContent = "Busy";
+            } else {
+                input.value = "False";
+                btn.classList.remove("btn-danger");
+                btn.classList.add("btn-success");
+                btn.textContent = "Free";
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            const input = document.querySelector("input[name='IsBusy']");
+            const btn = document.getElementById("statusBtn");
+            if (input.value === "True") {
+                btn.classList.remove("btn-success");
+                btn.classList.add("btn-danger");
+                btn.textContent = "Busy";
+            }
+        });
+    </script>
+}

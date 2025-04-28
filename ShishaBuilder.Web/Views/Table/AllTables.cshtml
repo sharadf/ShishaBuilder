@@ -1,0 +1,74 @@
+@model IEnumerable<ShishaBuilder.Core.Models.Table>
+
+@{
+    ViewData["Title"] = "All Tables";
+    var showDeleted = ViewBag.ShowDeleted == true;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>@(ViewBag.ShowDeleted == true ? "Deleted Tables" : "All Tables")</h2>
+
+    @if (ViewBag.ShowDeleted == true)
+    {
+        <a asp-action="AllTables" class="btn btn-outline-primary">
+            Show Active
+        </a>
+    }
+    else
+    {
+        <a asp-action="DeletedTables" class="btn btn-outline-secondary">
+            Show Deleted
+        </a>
+    }
+</div>
+
+<div class="row">
+    @foreach (var table in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Table #@table.TableNumber</h5>
+
+                    <!-- Status Icon with tooltip -->
+                    <div class="mb-2">
+                        <span title="@(table.IsBusy ? "Busy" : "Free")"
+                              class="status-indicator @(table.IsBusy ? "busy" : "free")">
+                        </span>
+                        <span class="ms-2 fw-bold">
+                            @(table.IsBusy ? "Busy" : "Free")
+                        </span>
+                    </div>
+                    @if (ViewBag.ShowDeleted != true)
+                    {
+                        <div class="d-flex justify-content-between">
+                            <!-- Edit button -->
+                            <a asp-action="Edit" asp-route-id="@table.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <!-- Soft delete button -->
+                            <form asp-action="SoftDelete" method="post" asp-route-id="@table.Id" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .status-indicator {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+
+    .status-indicator.free {
+        background-color: #28a745; /* Green */
+    }
+
+    .status-indicator.busy {
+        background-color: #dc3545; /* Red */
+    }
+</style>

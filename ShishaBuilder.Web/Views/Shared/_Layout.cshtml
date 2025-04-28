@@ -220,12 +220,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Hookah" asp-action="Create">Create Hookah</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Tobacco" asp-action="AllTobaccos">AllTobaccos</a>
-                        </li>
-                        <li class="nav-item"></li>
-                            <a class="nav-link" asp-controller="Tobacco" asp-action="Create">Create Tobacco</a>
-                        </li>
+                       
                         <li class="nav-item"></li>
                             <a class="nav-link" asp-controller="Master" asp-action="AllMasters">AllMasters</a>
                         </li>
@@ -238,11 +233,18 @@
                         <li class="nav-item"></li>
                             <a class="nav-link" asp-controller="Tobacco" asp-action="Create">Create Tobacco</a>
                         </li>
+
                         <li class="nav-item"></li>
-                            <a class="nav-link" asp-controller="Master" asp-action="AllMasters">AllMasters</a>
+                            <a class="nav-link" asp-controller="Table" asp-action="AllTables">AllTables</a>
                         </li>
                         <li class="nav-item"></li>
-                            <a class="nav-link" asp-controller="Master" asp-action="Create">Create Master</a>
+                            <a class="nav-link" asp-controller="Table" asp-action="Create">Create Table</a>
+                        </li>
+                         <li class="nav-item"></li>
+                            <a class="nav-link" asp-controller="Order" asp-action="SelectHookah">Make Order</a>
+                        </li>
+                         <li class="nav-item"></li>
+                            <a class="nav-link" asp-controller="Order" asp-action="AllOrders">All Orders</a>
                         </li>
                     </ul>
                 </div>
@@ -255,11 +257,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - ShishaBuilder.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+   
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

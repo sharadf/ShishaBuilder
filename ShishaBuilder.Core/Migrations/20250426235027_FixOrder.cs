@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -6,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ShishaBuilder.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class RecreateMigrations : Migration
+    public partial class FixOrder : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,6 +27,22 @@ namespace ShishaBuilder.Core.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Masters", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TobaccosId = table.Column<List<int>>(type: "integer[]", nullable: false),
+                    HookahId = table.Column<int>(type: "integer", nullable: false),
+                    TableId = table.Column<int>(type: "integer", nullable: false),
+                    MasterId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,6 +69,9 @@ namespace ShishaBuilder.Core.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Masters");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Tobaccos");

@@ -12,5 +12,4 @@ public interface IMasterRepository
     Task <Master> GetMasterByIdAsync(int id);
     Task UpdateMasterAsync(Master master);
     Task<IEnumerable<Master>> GetAllMastersAsync();
-
 }
