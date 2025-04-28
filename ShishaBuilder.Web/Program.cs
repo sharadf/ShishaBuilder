@@ -22,6 +22,17 @@ using ShishaBuilder.Core.Validation.HookahValidations;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddAuthentication("MyCookieAuthScheme")
+    .AddCookie("MyCookieAuthScheme", options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
+    });
+
+builder.Services.AddAuthorization();
+
+
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllersWithViews();
@@ -75,6 +86,10 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateTobaccoViewModelValid
 builder.Services.AddValidatorsFromAssemblyContaining<CreateTableValidator>();
 
 var app = builder.Build();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.UseSwagger();
 app.UseSwaggerUI();

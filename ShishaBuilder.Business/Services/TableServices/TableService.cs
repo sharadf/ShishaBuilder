@@ -40,7 +40,7 @@ public class TableService : ITableService
     public async Task SoftDeleteTableAsync(int id)
     {
         var tableDel = await tableRepository.GetByIdTableAsync(id);
-        if (tableDel  != null)
+        if (tableDel != null)
         {
             tableDel.IsDeleted = true;
             await tableRepository.UpdateTableAsync(tableDel);
