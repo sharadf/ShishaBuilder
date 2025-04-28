@@ -26,6 +26,13 @@ public class TableRepository : ITableRepository
 
     public async Task CreateTableAsync(ShishaBuilder.Core.Models.Table createTable)
     {
+        bool exists = await context.Tables.AnyAsync(t =>
+            t.TableNumber == createTable.TableNumber && !t.IsDeleted
+        );
+
+        if (exists)
+            throw new Exception("Table with this number already exists.");
+            
         context.Tables.Add(createTable);
         await context.SaveChangesAsync();
     }

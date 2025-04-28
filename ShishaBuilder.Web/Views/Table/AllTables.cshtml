@@ -30,7 +30,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Table #@table.TableNumber</h5>
 
-                    <!-- Status Icon with tooltip -->
+                    @* <!-- Status Icon with tooltip -->
                     <div class="mb-2">
                         <span title="@(table.IsBusy ? "Busy" : "Free")"
                               class="status-indicator @(table.IsBusy ? "busy" : "free")">
@@ -38,7 +38,25 @@
                         <span class="ms-2 fw-bold">
                             @(table.IsBusy ? "Busy" : "Free")
                         </span>
-                    </div>
+                    </div> *@
+
+    <p>
+        <strong>Status:</strong> 
+        @if (table.IsDeleted)
+        {
+            <span  style="color: black; font-weight: bold;">Deleted</span>
+        }
+        else if (table.IsBusy)
+        {
+            <span  style="color: orange;">Busy</span>
+        }
+        else
+        {
+            <span  style="color: green;">Free</span>
+        }
+    </p>
+
+
                     @if (ViewBag.ShowDeleted != true)
                     {
                         <div class="d-flex justify-content-between">
