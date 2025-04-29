@@ -1,0 +1,105 @@
+@model IEnumerable<ShishaBuilder.Core.DTOs.OrderDtos.AllOrdersViewModelDto>
+@using ShishaBuilder.Core.Enums
+@{
+    ViewData["Title"] = "All Orders";
+}
+
+
+<div class="container mt-4">
+    <h2 class="mb-4">All Orders</h2>
+
+    @if (Model?.Any() != true)
+    {
+        <div class="alert alert-info">
+            No orders found.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Hookah</th>
+                        <th>Table</th>
+                        <th>Master</th>
+                        <th>Tobaccos</th>
+                        <th>Created</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td>@order.Id</td>
+                            <td>@order.Hookah.ModelName</td>
+                            <td>@order.Table.TableNumber</td>
+                            <td>
+                                @if(order.Master==null)
+                                {
+                                     <span class="text-muted">No Master</span>
+                                }
+                                else
+                                {
+                                    @order.Master.FirstName @order.Master.LastName
+                                }
+                            </td>
+                            <td>
+                                @foreach (var t in order.Tobaccos)
+                                {
+                                    <li>@t.Name (@t.Brand) – @t.Percentage%</li>
+                                }
+                            </td>
+                            <td>@order.CreatedAt.ToString("g")</td>
+                            <td>
+                                <span class="badge @GetStatusBadgeClass(order.OrderStatus)">
+                                    @order.OrderStatus
+                                </span>
+                            </td>
+                            <td>
+                                <a asp-action="OrderDetails" asp-route-id="@order.Id" 
+                                   class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i> Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@functions {
+    string GetStatusBadgeClass(OrderStatus status)
+    {
+        return status switch
+        {
+            OrderStatus.Completed => "badge-success",
+            OrderStatus.InProgress => "badge-primary",
+            OrderStatus.Pending => "badge-warning",
+            OrderStatus.Cancelled => "badge-danger",
+            _ => "badge-secondary"
+        };
+    }
+}
+
+<style>
+    .table th {
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    .badge {
+        font-size: 0.85em;
+        padding: 0.35em 0.65em;
+        min-width: 80px;
+        display: inline-block;
+        text-transform: capitalize;
+    }
+    .list-unstyled li {
+        margin-bottom: 3px;
+    }
+</style>

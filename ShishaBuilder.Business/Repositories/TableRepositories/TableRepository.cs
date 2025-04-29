@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ShishaBuilder.Core.Data;
+using ShishaBuilder.Core.Models;
 using ShishaBuilder.Core.Repositories.TableRepositories;
 
 namespace ShishaBuilder.Business.Repositories.TableRepositories;
@@ -41,5 +42,12 @@ public class TableRepository : ITableRepository
     {
         context.Tables.Update(editTable);
         await context.SaveChangesAsync();
+    }
+
+    public async Task<Core.Models.Table> GetByTableNumber(int tableNumber)
+    {
+        return await context.Tables.FirstOrDefaultAsync(t=>
+            t.TableNumber==tableNumber);
+        
     }
 }

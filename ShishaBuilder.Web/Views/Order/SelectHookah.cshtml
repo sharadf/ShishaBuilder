@@ -1,0 +1,41 @@
+@model IEnumerable<ShishaBuilder.Core.Models.Hookah>
+@{
+    ViewData["Title"] = "SelectHookah";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model == null)
+{
+    <p>No hookahs available.</p>
+}
+else
+{
+
+    <div class="row">
+        @foreach (var hookah in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+            @if (!string.IsNullOrEmpty(hookah.Image))
+            {
+                <img src="@hookah.Image" class="card-img-top" alt="@hookah.ModelName" style="height: 400px; object-fit: cover;" />
+            }
+            else
+            {
+            <div style="height: 200px; background-color: #e2e6ea; display: flex; align-items: center; justify-content: center;">
+                <span style="color: #6c757d;">No Image</span>
+            </div>
+                }
+                
+                    <div class="card-body">
+                        <h5 class="card-title">@hookah.ModelName</h5>
+                        <p class="card-text"><strong>Company name:</strong> @hookah.CompanyName</p>                    
+                        <a href="@Url.Action("SelectTobacco", "Order", new{hookahId=hookah.Id})" class="btn btn-primary">Select</a>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

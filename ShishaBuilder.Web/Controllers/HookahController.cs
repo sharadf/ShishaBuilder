@@ -12,7 +12,8 @@ namespace ShishaBuilder.Web.Controllers
         private readonly IHookahService hookahService;
         private readonly IBlobService blobService;
 
-        private string containerName = "hookahs";
+        private string containerName="hookahs";
+
 
         public HookahController(IHookahService hookahService, IBlobService blobService)
         {
@@ -47,7 +48,7 @@ namespace ShishaBuilder.Web.Controllers
         public async Task<ActionResult> Create([FromForm] CreateHookah hookahDto)
         {
             string imageUrl = string.Empty;
-
+           
             if (hookahDto.ImageFile != null)
                 imageUrl = await blobService.UploadPhotoAsync(hookahDto.ImageFile, containerName);
 

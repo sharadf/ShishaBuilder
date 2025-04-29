@@ -1,0 +1,129 @@
+@model IEnumerable<ShishaBuilder.Core.Models.Tobacco>
+@{
+    var hookahId = (int)ViewData["HookahId"];
+}
+
+<div class="container py-3">
+    <h2 class="text-center mb-4">Customize Your Hookah Mix</h2>
+
+    <form asp-action="PreviewOrder" method="get" class="mb-4">
+        <input type="hidden" name="hookahId" value="@hookahId" />
+        
+        <div class="row mb-3">
+            <div class="col-md-4 mx-auto">
+                <label for="tableNumber" class="form-label">Table Number</label>
+                <input type="number" class="form-control" name="tableNumber" 
+                       min="1" max="20" required>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var tobacco in Model)
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <div style="height: 300px; overflow: hidden;">
+                            <img src="@tobacco.ImageUrl" class="card-img-top h-100 w-100 object-fit-cover" alt="@tobacco.Name">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">@tobacco.Name</h5>
+                            <p class="card-text text-muted small mb-2">
+                                @tobacco.Brand • @tobacco.Flavor • @tobacco.Strength
+                            </p>
+                            
+                            <div class="btn-group w-100">
+                                @foreach (var percent in new[] { 25, 50, 75, 100 })
+                                {
+                                    <button type="button" class="btn btn-sm btn-outline-secondary percentage-btn"
+                                            data-tobaccoid="@tobacco.Id" data-percent="@percent">
+                                        @percent%
+                                    </button>
+                                }
+                            </div>
+                            <input type="hidden" name="tobaccoPercentages[@tobacco.Id]" 
+                                   id="tobacco-@tobacco.Id" value="0">
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="sticky-bottom bg-white p-3 shadow mt-4">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="d-flex align-items-center">
+                            <strong class="me-2">Total:</strong>
+                            <span id="totalPercent" class="badge bg-primary">0%</span>
+                            <span id="percentError" class="text-danger small ms-2"></span>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary px-4" id="submitBtn" disabled>
+                            <i class="fas fa-arrow-right me-2"></i>Continue
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+<script>
+    document.querySelectorAll('.percentage-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tobaccoId = this.dataset.tobaccoid;
+            const percent = parseInt(this.dataset.percent);
+            const input = document.getElementById(`tobacco-${tobaccoId}`);
+            
+            // Toggle selection
+            if (parseInt(input.value) === percent) {
+                input.value = 0;
+                this.classList.remove('btn-primary');
+                this.classList.add('btn-outline-secondary');
+            } else {
+                // Reset other buttons for this tobacco
+                document.querySelectorAll(`.percentage-btn[data-tobaccoid="${tobaccoId}"]`)
+                    .forEach(b => {
+                        b.classList.remove('btn-primary');
+                        b.classList.add('btn-outline-secondary');
+                    });
+                
+                input.value = percent;
+                this.classList.add('btn-primary');
+                this.classList.remove('btn-outline-secondary');
+            }
+            
+            updateTotal();
+        });
+    });
+
+    function updateTotal() {
+        const inputs = document.querySelectorAll('input[id^="tobacco-"]');
+        let total = 0;
+        
+        inputs.forEach(input => {
+            total += parseInt(input.value) || 0;
+        });
+
+        const totalElement = document.getElementById('totalPercent');
+        const errorElement = document.getElementById('percentError');
+        const submitBtn = document.getElementById('submitBtn');
+
+        totalElement.textContent = `${total}%`;
+        totalElement.className = `badge ${total === 100 ? 'bg-success' : 'bg-primary'}`;
+
+        if (total > 100) {
+            errorElement.textContent = 'Cannot exceed 100%';
+            submitBtn.disabled = true;
+        } else if (total < 100) {
+            errorElement.textContent = 'Select 100% total';
+            submitBtn.disabled = true;
+        } else {
+            errorElement.textContent = '';
+            submitBtn.disabled = false;
+        }
+    }
+</script>
+}

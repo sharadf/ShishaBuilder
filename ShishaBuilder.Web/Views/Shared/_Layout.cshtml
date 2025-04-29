@@ -241,11 +241,20 @@
             <a class="nav-link" asp-controller="Table" asp-action="Create">Create Table</a>
         </li>
 
+                <li class="nav-item">
+            <a class="nav-link" asp-controller="Order" asp-action="SelectHookah">MakeOrder</a>
+        </li>
+                <li class="nav-item">
+            <a class="nav-link" asp-controller="Order" asp-action="AllOrders">AllOrders</a>
+        </li>
+
         <li class="nav-item">
             <form method="post" asp-controller="Account" asp-action="Logout">
                 <button type="submit" class="nav-link btn btn-link">Logout</button>
             </form>
         </li>
+
+
     }
     else
     {
@@ -254,6 +263,7 @@
         </li>
     }
 </ul>
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -267,6 +277,8 @@
     </div>
 </div>
 
+
+   
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

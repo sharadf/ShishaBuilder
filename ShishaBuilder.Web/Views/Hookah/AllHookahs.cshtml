@@ -209,16 +209,16 @@
     {
         <div class="col-md-4 mb-4">
             <div class="card">
-        @if (!string.IsNullOrEmpty(hookah.Image))
+         @if (!string.IsNullOrEmpty(hookah.Image))
         {
-            <img src="@hookah.Image" class="card-img-top" alt="@hookah.ModelName" style="height: 250px; width: 100%; object-fit: contain; background-color: #f8f9fa;" />
+            <img src="@hookah.Image" class="card-img-top" alt="@hookah.ModelName" style="height: 200px; object-fit: cover;" />
         }
         else
         {
-            <div style="height: 250px; background-color: #e2e6ea; display: flex; align-items: center; justify-content: center;">
-                <span style="color: #6c757d;">No Image</span>
-            </div>
-        }
+        <div style="height: 200px; background-color: #e2e6ea; display: flex; align-items: center; justify-content: center;">
+            <span style="color: #6c757d;">No Image</span>
+        </div>
+            }
               
                 <div class="card-body">
                     <h5 class="card-title">@hookah.ModelName</h5>

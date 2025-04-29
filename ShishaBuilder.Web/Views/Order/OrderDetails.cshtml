@@ -1,0 +1,86 @@
+@model ShishaBuilder.Core.DTOs.OrderDtos.OrderPreviewViewModelDto
+
+@if (Model == null || Model.Hookah == null)
+{
+    <div class="alert alert-danger" role="alert">
+        Order data is not available. Please try again.
+    </div>
+    return;
+}
+
+<div class="container mt-4">
+    <div class="card mb-4 shadow-sm">
+        <div class="row g-0">
+            <!-- Hookah Image -->
+            <div class="col-md-4">
+                @if (!string.IsNullOrEmpty(Model.Hookah.Image))
+                {
+                    <img src="@Model.Hookah.Image" 
+                         class="img-fluid rounded-start h-100" 
+                         alt="@Model.Hookah.ModelName" 
+                         style="object-fit: cover; min-height: 300px;">
+                }
+                else
+                {
+                    <div class="d-flex align-items-center justify-content-center bg-light h-100">
+                        <span class="text-muted">No image available</span>
+                    </div>
+                }
+            </div>
+
+            <!-- Order Details -->
+            <div class="col-md-8">
+                <div class="card-body h-100 d-flex flex-column">
+                    <h3 class="card-title mb-3">@Model.Hookah.ModelName</h3>
+
+                    <div class="mb-3">
+                        <h5>Table: <span class="badge bg-secondary fs-6">@Model.Table.TableNumber</span></h5>
+                    </div>
+                     <div class="mb-3">
+                        <h5>Master: <span class="badge bg-secondary fs-6">@Model.Table.TableNumber</span></h5>
+                    </div>
+
+
+                    <div class="mb-4 flex-grow-1">
+                        <h5 class="mb-3">Your Custom Mix:</h5>
+                        <ul class="list-group list-group-flush">
+                            @foreach (var item in Model.TobaccoMix)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center py-2">
+                                    <div class="fw-medium">
+                                        @item.Brand - @item.TobaccoName
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill fs-6">@item.Percentage%</span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="mt-auto">
+            
+                            @foreach (var item in Model.TobaccoMix)
+                            {
+                                <input type="hidden" name="TobaccoPercentages[@item.TobaccoId]" value="@item.Percentage" />
+                            }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    .list-group-item {
+        background-color: rgba(0,0,0,0.03);
+        border-color: rgba(0,0,0,0.05);
+    }
+    .btn-primary {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+</style>

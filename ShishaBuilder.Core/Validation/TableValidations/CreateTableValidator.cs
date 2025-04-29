@@ -7,7 +7,6 @@ namespace ShishaBuilder.Core.Validation.HookahValidations;
 public class CreateTableValidator : AbstractValidator<CreateTable>
 {
     private int maximumTableCount = 50;
-
     public CreateTableValidator()
     {
         RuleFor((CreatedTable) => CreatedTable.TableNumber)
