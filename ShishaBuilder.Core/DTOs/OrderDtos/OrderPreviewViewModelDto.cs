@@ -8,9 +8,8 @@ namespace ShishaBuilder.Core.DTOs.OrderDtos;
 
 public class OrderPreviewViewModelDto
 {
-    public required Hookah Hookah { get; set; }    
+    public required Hookah Hookah { get; set; }
     public required Table Table { get; set; }
-
-    public Dictionary<int ,int >TobaccoPercentages { get; set; }=new Dictionary<int, int>();
-    public List<(Tobacco Tobacco, int Percentage)> SelectedTobaccos { get; set; } = new List<(Tobacco, int)>();
+    public List<TobaccoPercentageDto> TobaccoMix { get; set; } = new List<TobaccoPercentageDto>();
+    public Dictionary<int, int> TobaccoPercentages { get; set; } = new();
 }

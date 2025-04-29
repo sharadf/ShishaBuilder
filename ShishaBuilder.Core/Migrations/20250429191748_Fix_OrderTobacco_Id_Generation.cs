@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ShishaBuilder.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class FixOrder : Migration
+    public partial class Fix_OrderTobacco_Id_Generation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,10 +35,11 @@ namespace ShishaBuilder.Core.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    TobaccosId = table.Column<List<int>>(type: "integer[]", nullable: false),
                     HookahId = table.Column<int>(type: "integer", nullable: false),
                     TableId = table.Column<int>(type: "integer", nullable: false),
-                    MasterId = table.Column<int>(type: "integer", nullable: false)
+                    MasterId = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    OrderStatus = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,6 +63,43 @@ namespace ShishaBuilder.Core.Migrations
                 {
                     table.PrimaryKey("PK_Tobaccos", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "OrderTobaccos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrderId = table.Column<int>(type: "integer", nullable: false),
+                    TobaccoId = table.Column<int>(type: "integer", nullable: false),
+                    Percentage = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderTobaccos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderTobaccos_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderTobaccos_Tobaccos_TobaccoId",
+                        column: x => x.TobaccoId,
+                        principalTable: "Tobaccos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderTobaccos_OrderId",
+                table: "OrderTobaccos",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderTobaccos_TobaccoId",
+                table: "OrderTobaccos",
+                column: "TobaccoId");
         }
 
         /// <inheritdoc />
@@ -69,6 +107,9 @@ namespace ShishaBuilder.Core.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Masters");
+
+            migrationBuilder.DropTable(
+                name: "OrderTobaccos");
 
             migrationBuilder.DropTable(
                 name: "Orders");

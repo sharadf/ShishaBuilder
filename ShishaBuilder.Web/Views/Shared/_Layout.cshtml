@@ -190,8 +190,10 @@
         .bg-blur {
             backdrop-filter: blur(10px);
             background-color: rgba(255, 255, 255, 0.85) !important;
-        }
+        }        
+
     </style>
+
 </head>
 
 <body>
@@ -204,58 +206,77 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                asp-action="Privacy">Privacy</a>
-                        </li>
+                   <ul class="navbar-nav flex-grow-1">
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Hookah" asp-action="AllHookahs">All
-                                Hookahs</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Hookah" asp-action="Create">Create Hookah</a>
-                        </li>
-                       
-                        <li class="nav-item"></li>
-                            <a class="nav-link" asp-controller="Master" asp-action="AllMasters">AllMasters</a>
-                        </li>
-                        <li class="nav-item"></li>
-                            <a class="nav-link" asp-controller="Master" asp-action="Create">Create Master</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Tobacco" asp-action="AllTobaccos">AllTobaccos</a>
-                        </li>
-                        <li class="nav-item"></li>
-                            <a class="nav-link" asp-controller="Tobacco" asp-action="Create">Create Tobacco</a>
-                        </li>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Hookah" asp-action="AllHookahs">All Hookahs</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Hookah" asp-action="Create">Create Hookah</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Tobacco" asp-action="AllTobaccos">All Tobaccos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Tobacco" asp-action="Create">Create Tobacco</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Master" asp-action="AllMasters">All Masters</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Master" asp-action="Create">Create Master</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Table" asp-action="AllTables">All Tables</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Table" asp-action="Create">Create Table</a>
+        </li>
 
-                        <li class="nav-item"></li>
-                            <a class="nav-link" asp-controller="Table" asp-action="AllTables">AllTables</a>
-                        </li>
-                        <li class="nav-item"></li>
-                            <a class="nav-link" asp-controller="Table" asp-action="Create">Create Table</a>
-                        </li>
-                         <li class="nav-item"></li>
-                            <a class="nav-link" asp-controller="Order" asp-action="SelectHookah">Make Order</a>
-                        </li>
-                         <li class="nav-item"></li>
-                            <a class="nav-link" asp-controller="Order" asp-action="AllOrders">All Orders</a>
-                        </li>
+                <li class="nav-item">
+            <a class="nav-link" asp-controller="Order" asp-action="SelectHookah">MakeOrder</a>
+        </li>
+                <li class="nav-item">
+            <a class="nav-link" asp-controller="Order" asp-action="AllOrders">AllOrders</a>
+        </li>
+
+        <li class="nav-item">
+            <form method="post" asp-controller="Account" asp-action="Logout">
+                <button type="submit" class="nav-link btn btn-link">Logout</button>
+            </form>
+        </li>
+
+
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+        </li>
+    }
+</ul>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+
+<div class="container">
+    <div class="card p-4">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+</div>
+
 
    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -264,7 +285,6 @@
 
 
     <script>
-
         // Add smooth scrolling to all links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -290,3 +310,507 @@
 </body>
 
 </html>
+
+
+
+
+
+@* 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShishaBuilder - Кальянный центр</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ShishaBuilder.Web.styles.css" asp-append-version="true" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6a4c93;
+            --secondary: #8a5a44;
+            --accent: #f8961e;
+            --light: #f8f9fa;
+            --dark: #2b2d42;
+            --success: #4ade80;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --transition: all 0.3s ease-in-out;
+            --text-light: #f8f9fa;
+            --text-dark: #212529;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: url('https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(42, 42, 42, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            padding: 1rem 2rem;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            background: rgba(33, 37, 41, 0.95);
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--text-light) !important;
+            letter-spacing: 1px;
+        }
+
+        .navbar-brand span {
+            color: var(--accent);
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 50px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--accent) !important;
+            transform: translateY(-2px);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 70%;
+        }
+
+        .navbar-toggler {
+            border: none;
+            color: white !important;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        /* Main Content */
+        .container {
+            flex: 1;
+            padding-top: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        main {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            text-align: center;
+            padding: 4rem 0;
+            color: var(--text-light);
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .welcome-section h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .welcome-section p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Button Grid */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem auto;
+            max-width: 1200px;
+        }
+
+        .action-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .action-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .action-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .action-card h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .action-card p {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Buttons */
+        .btn {
+            border-radius: 50px;
+            padding: 0.6rem 1.8rem;
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #5a3f7a;
+        }
+
+        .btn-outline-light {
+            border: 2px solid var(--text-light);
+            color: var(--text-light);
+        }
+
+        .btn-outline-light:hover {
+            background-color: var(--text-light);
+            color: var(--dark);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(33, 37, 41, 0.95);
+            color: var(--text-light) !important;
+            padding: 2rem 0;
+            margin-top: auto;
+            backdrop-filter: blur(5px);
+        }
+
+        footer a {
+            color: var(--accent) !important;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        footer a:hover {
+            color: var(--text-light) !important;
+            text-decoration: underline;
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            margin-right: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @@media (max-width: 992px) {
+            .welcome-section h1 {
+                font-size: 2.8rem;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .nav-link {
+                margin: 0.25rem 0;
+                padding: 0.5rem 1rem;
+            }
+
+            .welcome-section h1 {
+                font-size: 2.2rem;
+            }
+
+            .welcome-section p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Special Effects */
+        .bg-blur {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.85) !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay"></div>
+    
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Shisha<span>Builder</span></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Конфиденциальность</a>
+                        </li>
+                        
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Logout">Выйти</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">Войти</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <h1>Добро пожаловать в ShishaBuilder</h1>
+                <p>Премиальный кальянный центр с лучшими вкусами и атмосферой для вашего отдыха</p>
+            </section>
+
+            <!-- Main Actions Grid -->
+            <div class="button-grid">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <!-- Hookah Section -->
+                    <div class="action-card">
+                        <i class="fas fa-smoking"></i>
+                        <h3>Кальяны</h3>
+                        <p>Управление кальянными устройствами</p>
+                        <div class="d-grid gap-2">
+                            <a asp-controller="Hookah" asp-action="AllHookahs" class="btn btn-primary">Все кальяны</a>
+                            <a asp-controller="Hookah" asp-action="Create" class="btn btn-outline-primary">Создать кальян</a>
+                        </div>
+                    </div>
+
+                    <!-- Tobacco Section -->
+                    <div class="action-card">
+                        <i class="fas fa-leaf"></i>
+                        <h3>Табак</h3>
+                        <p>Управление ассортиментом табаков</p>
+                        <div class="d-grid gap-2">
+                            <a asp-controller="Tobacco" asp-action="AllTobaccos" class="btn btn-primary">Весь табак</a>
+                            <a asp-controller="Tobacco" asp-action="Create" class="btn btn-outline-primary">Добавить табак</a>
+                        </div>
+                    </div>
+
+                    <!-- Masters Section -->
+                    <div class="action-card">
+                        <i class="fas fa-user-tie"></i>
+                        <h3>Мастера</h3>
+                        <p>Управление персоналом</p>
+                        <div class="d-grid gap-2">
+                            <a asp-controller="Master" asp-action="AllMasters" class="btn btn-primary">Все мастера</a>
+                            <a asp-controller="Master" asp-action="Create" class="btn btn-outline-primary">Добавить мастера</a>
+                        </div>
+                    </div>
+
+                    <!-- Tables Section -->
+                    <div class="action-card">
+                        <i class="fas fa-couch"></i>
+                        <h3>Столы</h3>
+                        <p>Управление столиками</p>
+                        <div class="d-grid gap-2">
+                            <a asp-controller="Table" asp-action="AllTables" class="btn btn-primary">Все столы</a>
+                            <a asp-controller="Table" asp-action="Create" class="btn btn-outline-primary">Добавить стол</a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="action-card">
+                        <i class="fas fa-lock"></i>
+                        <h3>Доступ ограничен</h3>
+                        <p>Для работы с системой необходимо авторизоваться</p>
+                        <div class="d-grid gap-2">
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-primary">Войти в систему</a>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="text-center text-lg-start">
+        <div class="container p-4">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">ShishaBuilder</h5>
+                    <p>
+                        Премиальный кальянный центр с лучшими вкусами и атмосферой для вашего отдыха.
+                    </p>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Контакты</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> г. Москва, ул. Примерная, 123</li>
+                        <li><i class="fas fa-phone me-2"></i> +7 (123) 456-78-90</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@shishabuilder.ru</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Социальные сети</h5>
+                    <div class="social-icons mt-3">
+                        <a href="#!"><i class="fab fa-instagram"></i></a>
+                        <a href="#!"><i class="fab fa-vk"></i></a>
+                        <a href="#!"><i class="fab fa-telegram"></i></a>
+                        <a href="#!"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © @DateTime.Now.Year ShishaBuilder. Все права защищены.
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animation for action cards
+        document.querySelectorAll('.action-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html> *@

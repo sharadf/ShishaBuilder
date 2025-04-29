@@ -7,16 +7,12 @@ namespace ShishaBuilder.Core.Validation.HookahValidations;
 public class CreateTableValidator : AbstractValidator<CreateTable>
 {
     private int maximumTableCount = 50;
-    private int minimumTableCount=1;
     public CreateTableValidator()
     {
         RuleFor((CreatedTable) => CreatedTable.TableNumber)
             .NotEmpty()
-                .WithMessage("Table must have a value.")
+            .WithMessage("Table must have a value.")
             .LessThan(maximumTableCount)
-                .WithMessage($"Table quantity can not be more than {maximumTableCount} tables.")
-            .GreaterThanOrEqualTo(minimumTableCount)
-                .WithMessage($"Table quantity can not be less than {minimumTableCount} tables.");
-
+            .WithMessage($"Table quantity can not be more than {maximumTableCount} tables.");
     }
 }

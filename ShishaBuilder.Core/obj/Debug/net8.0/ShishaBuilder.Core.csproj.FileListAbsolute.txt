@@ -11,3 +11,5 @@ C:\Users\acer\OneDrive\Документы\ShishaBuilder\ShishaBuilder.Core\obj\D
 C:\Users\acer\OneDrive\Документы\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\refint\ShishaBuilder.Core.dll
 C:\Users\acer\OneDrive\Документы\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\ShishaBuilder.Core.pdb
 C:\Users\acer\OneDrive\Документы\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\ref\ShishaBuilder.Core.dll
+C:\Users\acer\OneDrive\Документы\ShishaBuilder\ShishaBuilder.Core\bin\Debug\net8.0\ShishaBuilder.Core.runtimeconfig.json
+C:\Users\acer\OneDrive\Документы\ShishaBuilder\ShishaBuilder.Core\obj\Debug\net8.0\ShishaBuilder.Core.genruntimeconfig.cache

@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using ShishaBuilder.Business.Services.HookahServices;
+
 using ShishaBuilder.Core.DTOs.OrderDtos;
+using ShishaBuilder.Core.DTOs.TobaccoDtos;
 using ShishaBuilder.Core.Enums;
 using ShishaBuilder.Core.Models;
 using ShishaBuilder.Core.Services.MasterServices;
@@ -16,113 +12,118 @@ using ShishaBuilder.Core.Services.TobaccoServices;
 
 namespace ShishaBuilder.Web.Controllers;
 
+[Authorize]
 [Route("[controller]")]
 public class OrderController : Controller
 {
-    private IHookahService hookahService;
-    private ITobaccoService tobaccoService;
-    private ITableService tableService;
-    private IOrderService orderService;
+    private readonly IHookahService hookahService;
+    private readonly ITobaccoService tobaccoService;
+    private readonly ITableService tableService;
+    private readonly IOrderService orderService;
+    private readonly IMasterService masterService;
 
-    public OrderController(IHookahService hookahService,ITobaccoService tobaccoService,ITableService tableService,IOrderService orderService)
+    public OrderController(
+        IHookahService hookahService,
+        ITobaccoService tobaccoService,
+        ITableService tableService,
+        IOrderService orderService,
+        IMasterService masterService)
     {
-        this.hookahService=hookahService;
-
-        this.tobaccoService=tobaccoService;
-
-        this.tableService=tableService;
-        this.orderService=orderService;
+        this.hookahService = hookahService;
+        this.tobaccoService = tobaccoService;
+        this.tableService = tableService;
+        this.orderService = orderService;
+        this.masterService = masterService;
     }
 
-
     [HttpGet("SelectHookah")]
-    public async Task<ActionResult> SelectHookah()
+    public async Task<IActionResult> SelectHookah()
     {
         var hookahs = await hookahService.GetAllHookahsAsync();
         return View(hookahs);
     }
 
-
     [HttpGet("SelectTobacco")]
-    public async Task<ActionResult> SelectTobacco(int hookahId)
+    public async Task<IActionResult> SelectTobacco(int hookahId)
     {
         var tobaccos = await tobaccoService.GetAllTobaccosAsync();
-        ViewData["HookahId"]=hookahId;
+        ViewData["HookahId"] = hookahId;
         return View(tobaccos);
     }
 
     [HttpGet("PreviewOrder")]
     public async Task<IActionResult> PreviewOrder(
         int hookahId,
-        int tableId,
-        [FromQuery] Dictionary<int, int> tobaccoPercentages
-    )
+        int tableNumber,
+        [FromQuery] Dictionary<int, int> tobaccoPercentages)
     {
-        var validPercentages= tobaccoPercentages
-            .Where(x=>x.Value>0)
-            .ToDictionary(x=>x.Key,x=>x.Value);
+        var validPercentages = tobaccoPercentages
+            .Where(x => x.Value > 0)
+            .ToDictionary(x => x.Key, x => x.Value);
 
         if (validPercentages.Sum(x => x.Value) != 100)
         {
             return BadRequest("Total percentage must be exactly 100%");
         }
 
-        var hookah=await hookahService.GetByIdHookahAsync(hookahId);
-        var selectedTobaccos=new List<(Tobacco tobacco,int Percentage)>();
-        
+        var hookah = await hookahService.GetByIdHookahAsync(hookahId);
+        var table = await tableService.GetByTableNumber(tableNumber);
+
+        var tobaccoMix = new List<TobaccoPercentageDto>();
         foreach (var (tobaccoId, percentage) in validPercentages)
         {
             var tobacco = await tobaccoService.GetTobaccoByIdAsync(tobaccoId);
-            selectedTobaccos.Add((tobacco, percentage));
+            tobaccoMix.Add(new TobaccoPercentageDto
+            {
+                TobaccoId = tobaccoId,
+                TobaccoName = tobacco.Name,
+                Brand = tobacco.Brand,
+                Percentage = percentage
+            });
         }
-        var table = await tableService.GetByIdTableAsync(tableId);
-        return View(model: new OrderPreviewViewModelDto
+
+        return View(new OrderPreviewViewModelDto
         {
             Hookah = hookah,
             Table = table,
-            SelectedTobaccos = selectedTobaccos,
-            TobaccoPercentages = validPercentages 
+            TobaccoMix = tobaccoMix,
+            TobaccoPercentages = validPercentages
         });
     }
 
     [HttpPost("CreateOrder")]
     public async Task<IActionResult> CreateOrder(OrderPreviewViewModelDto model)
     {
-        // Проверка суммы процентов
         if (model.TobaccoPercentages.Sum(x => x.Value) != 100)
         {
             return BadRequest("Total percentage must be exactly 100%");
         }
 
-        // Создаем список OrderTobacco
-        var orderTobaccos = model.SelectedTobaccos
-            .Select(t => new OrderTobacco
-            {
-                TobaccoId = t.Tobacco.Id,
-                Percentage = t.Percentage
-            })
-            .ToList();
-
-        // Создаем заказ
         var order = new Order
         {
             HookahId = model.Hookah.Id,
             TableId = model.Table.Id,
             CreatedAt = DateTime.UtcNow,
-            OrderStatus = OrderStatus.Pending,
-            OrderTobaccos = orderTobaccos
+            OrderStatus = OrderStatus.Pending
         };
 
-        // Сохраняем заказ
+        foreach (var (tobaccoId, percentage) in model.TobaccoPercentages)
+        {
+            order.OrderTobaccos.Add(new OrderTobacco
+            {
+                TobaccoId = tobaccoId,
+                Percentage = percentage
+            });
+        }
+
         try
         {
-            var result = await orderService.AddOrderAsync(order);
-            return RedirectToAction("OrderSuccess", new { orderId = result.Id });
+            await orderService.AddOrderAsync(order);
+            return RedirectToAction("OrderSuccess", new { orderId = order.Id });
         }
         catch (Exception ex)
         {
-            // Логирование ошибки
-            return StatusCode(500, "Internal server error");
+            return StatusCode(500, $"Error creating order: {ex.Message}");
         }
     }
 
@@ -135,17 +136,47 @@ public class OrderController : Controller
     [HttpGet("AllOrders")]
     public async Task<IActionResult> AllOrders()
     {
-        var all= await orderService.GetAllOrdersAsync();
-        return View(all);
+        var orders = await orderService.GetAllOrdersAsync();
+        var result = new List<AllOrdersViewModelDto>();
+
+        foreach (var order in orders)
+        {
+            var table = await tableService.GetByIdTableAsync(order.TableId);
+            Master? master = order.MasterId != 0
+                ? await masterService.GetMasterByIdAsync(order.MasterId)
+                : null;
+            var hookah = await hookahService.GetByIdHookahAsync(order.HookahId);
+
+            var tobaccos = new List<TobaccoShowInfoViewModelDto>();
+            foreach (var ot in order.OrderTobaccos)
+            {
+                var tobacco = await tobaccoService.GetTobaccoByIdAsync(ot.TobaccoId);
+                tobaccos.Add(new TobaccoShowInfoViewModelDto
+                {
+                    Name = tobacco.Name,
+                    Brand = tobacco.Brand,
+                    Percentage = ot.Percentage
+                });
+            }
+
+            result.Add(new AllOrdersViewModelDto
+            {
+                Id = order.Id,
+                Table = table,
+                Master = master,
+                Hookah = hookah,
+                CreatedAt = order.CreatedAt,
+                Tobaccos = tobaccos
+            });
+        }
+
+        return View(result);
     }
 
     [HttpGet("OrderDetails/{orderId}")]
     public async Task<IActionResult> OrderDetails(int orderId)
     {
-        
-       var order=await orderService.GetOrderByIdAsync(orderId);
-       return View(order);
-
+        var order = await orderService.GetOrderByIdAsync(orderId);
+        return View(order);
     }
-    
 }

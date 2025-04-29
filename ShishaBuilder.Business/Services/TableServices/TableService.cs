@@ -53,4 +53,10 @@ public class TableService : ITableService
 
         return all.Where(t => t.IsDeleted == true);
     }
+
+    public async Task<Table> GetByTableNumber(int tableNumber)
+    {
+        var table =await tableRepository.GetByTableNumber(tableNumber);
+        return table;
+    }
 }

@@ -12,8 +12,8 @@ using ShishaBuilder.Core.DB;
 namespace ShishaBuilder.Core.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250428001107_FixOrderTobacco")]
-    partial class FixOrderTobacco
+    [Migration("20250429191748_Fix_OrderTobacco_Id_Generation")]
+    partial class Fix_OrderTobacco_Id_Generation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -154,7 +154,7 @@ namespace ShishaBuilder.Core.Migrations
                     b.HasOne("ShishaBuilder.Core.Models.Tobacco", "Tobacco")
                         .WithMany()
                         .HasForeignKey("TobaccoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Order");

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShishaBuilder.Core.Dtos.MasterDtos;
 using ShishaBuilder.Core.Models;
@@ -6,6 +7,7 @@ using ShishaBuilder.Core.Services.MasterServices;
  
 namespace ShishaBuilder.Web.Controllers;
  
+[Authorize]
 [Route("[controller]")]
 public class MasterController : Controller
 {

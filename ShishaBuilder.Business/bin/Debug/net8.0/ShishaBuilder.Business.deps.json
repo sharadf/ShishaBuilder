@@ -1231,9 +1231,12 @@
       "ShishaBuilder.Core/1.0.0": {
         "dependencies": {
           "FluentValidation": "11.11.0",
+          "FluentValidation.AspNetCore": "11.3.0",
           "Microsoft.AspNetCore.Http": "2.3.0",
+          "Microsoft.AspNetCore.Http.Abstractions": "2.3.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.14",
           "Microsoft.EntityFrameworkCore": "9.0.4",
+          "Microsoft.EntityFrameworkCore.SqlServer": "9.0.4",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.4"
         },
         "runtime": {

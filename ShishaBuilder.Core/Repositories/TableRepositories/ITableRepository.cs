@@ -8,4 +8,5 @@ public interface ITableRepository
     Task<ShishaBuilder.Core.Models.Table?> GetByIdTableAsync(int id);
     Task CreateTableAsync(ShishaBuilder.Core.Models.Table table);
     Task UpdateTableAsync(ShishaBuilder.Core.Models.Table table);
+    Task<Models.Table> GetByTableNumber(int tableNumber);
 }

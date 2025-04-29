@@ -1,4 +1,4 @@
-@model IEnumerable<ShishaBuilder.Core.Models.Order>
+@model IEnumerable<ShishaBuilder.Core.DTOs.OrderDtos.AllOrdersViewModelDto>
 @using ShishaBuilder.Core.Enums
 @{
     ViewData["Title"] = "All Orders";
@@ -24,6 +24,7 @@
                         <th>Hookah</th>
                         <th>Table</th>
                         <th>Master</th>
+                        <th>Tobaccos</th>
                         <th>Created</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -34,24 +35,22 @@
                     {
                         <tr>
                             <td>@order.Id</td>
-                            <td>Hookah #@order.HookahId</td>
-                            <td>Table #@order.TableId</td>
-                            <td>Master #@order.MasterId</td>
+                            <td>@order.Hookah.ModelName</td>
+                            <td>@order.Table.TableNumber</td>
                             <td>
-                                @if (order.OrderTobaccos?.Any() == true)
+                                @if(order.Master==null)
                                 {
-                                    <ul class="list-unstyled mb-0">
-                                        @foreach (var tobacco in order.OrderTobaccos)
-                                        {
-                                            <li>
-                                                @tobacco.Tobacco?.Name (@tobacco.Percentage%)
-                                            </li>
-                                        }
-                                    </ul>
+                                     <span class="text-muted">No Master</span>
                                 }
                                 else
                                 {
-                                    <span class="text-muted">No tobaccos</span>
+                                    @order.Master.FirstName @order.Master.LastName
+                                }
+                            </td>
+                            <td>
+                                @foreach (var t in order.Tobaccos)
+                                {
+                                    <li>@t.Name (@t.Brand) – @t.Percentage%</li>
                                 }
                             </td>
                             <td>@order.CreatedAt.ToString("g")</td>

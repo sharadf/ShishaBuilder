@@ -11,4 +11,5 @@ public interface ITableService
     Task UpdateTableAsync(ShishaBuilder.Core.Models.Table table);
     Task SoftDeleteTableAsync(int id);
     Task<IEnumerable<ShishaBuilder.Core.Models.Table>> GetAllDeletedTablesAsync();
+    Task<Models.Table> GetByTableNumber(int tableNumber);
 }

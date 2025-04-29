@@ -17,6 +17,11 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // Конфигурация Order -> OrderTobacco
+
+        modelBuilder.Entity<OrderTobacco>()
+            .Property(ot => ot.Id)
+            .ValueGeneratedOnAdd();
+
         modelBuilder.Entity<Order>()
             .HasMany(o => o.OrderTobaccos)
             .WithOne(ot => ot.Order)

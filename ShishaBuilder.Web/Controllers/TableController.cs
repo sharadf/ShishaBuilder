@@ -3,9 +3,11 @@ using ShishaBuilder.Core.DTOs.HookahDtos;
 using ShishaBuilder.Core.Models;
 using ShishaBuilder.Core.Services.TableServices;
 using ShishaBuilder.Core.DTOs.TableDtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShishaBuilder.Web.Controllers;
 
+[Authorize]
 [Route("[controller]")]
 public class TableController : Controller
 {

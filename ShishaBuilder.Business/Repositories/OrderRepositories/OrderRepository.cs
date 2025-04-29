@@ -19,20 +19,11 @@ public class OrderRepository : IOrderRepository
         using var transaction = await context.Database.BeginTransactionAsync();
         try
         {
-            // 1. Сохраняем Order (чтобы получить ID)
+            // Добавляем заказ вместе с табаками одним вызовом
             await context.Orders.AddAsync(order);
             await context.SaveChangesAsync();
             
-            // 2. Устанавливаем OrderId для всех OrderTobacco и сохраняем их
-            foreach (var tobacco in order.OrderTobaccos)
-            {
-                tobacco.OrderId = order.Id; // Устанавливаем связь
-                await context.OrderTobaccos.AddAsync(tobacco);
-            }
-            
-            await context.SaveChangesAsync(); // Сохраняем табаки
             await transaction.CommitAsync();
-            
             return order;
         }
         catch (Exception ex)
@@ -41,7 +32,7 @@ public class OrderRepository : IOrderRepository
             throw new Exception($"Error saving order: {ex.Message}", ex);
         }
     }
-  public async Task<IEnumerable<Order>> GetAllOrdersAsync()
+    public async Task<IEnumerable<Order>> GetAllOrdersAsync()
     {
         return await context.Orders
             .Include(o => o.OrderTobaccos) // Добавляем загрузку табаков
@@ -57,51 +48,66 @@ public class OrderRepository : IOrderRepository
 
     public async Task UpdateOrderAsync(Order order)
     {
-        // Загружаем существующий заказ с табаками
-        var existingOrder = await context.Orders
-            .Include(o => o.OrderTobaccos)
-            .FirstOrDefaultAsync(o => o.Id == order.Id);
-
-        if (existingOrder == null)
-            throw new Exception("Order not found");
-
-        // Обновляем основные поля
-        context.Entry(existingOrder).CurrentValues.SetValues(order);
-
-        // Обновляем коллекцию табаков
-        UpdateOrderTobaccos(existingOrder, order.OrderTobaccos);
-
-        await context.SaveChangesAsync();
-    }
-    private void UpdateOrderTobaccos(Order existingOrder, ICollection<OrderTobacco> newTobaccos)
-    {
-        // Удаляем отсутствующие
-        foreach (var existing in existingOrder.OrderTobaccos.ToList())
+        using var transaction = await context.Database.BeginTransactionAsync();
+        try
         {
-            if (!newTobaccos.Any(ot => ot.TobaccoId == existing.TobaccoId))
-                context.OrderTobaccos.Remove(existing);
+            var existingOrder = await context.Orders
+                .Include(o => o.OrderTobaccos)
+                .FirstOrDefaultAsync(o => o.Id == order.Id);
+
+            if (existingOrder == null)
+                throw new Exception("Order not found");
+
+            // Обновляем скалярные свойства
+            context.Entry(existingOrder).CurrentValues.SetValues(order);
+
+            // Обрабатываем табаки
+            await UpdateOrderTobaccosAsync(existingOrder, order.OrderTobaccos);
+            
+            await context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
+    private async Task UpdateOrderTobaccosAsync(Order existingOrder, ICollection<OrderTobacco> newTobaccos)
+    {
+        // Удаляем табаки, которых нет в новом списке
+        var tobaccosToRemove = existingOrder.OrderTobaccos
+            .Where(ot => !newTobaccos.Any(x => x.TobaccoId == ot.TobaccoId))
+            .ToList();
+
+        foreach (var tobacco in tobaccosToRemove)
+        {
+            context.OrderTobaccos.Remove(tobacco);
         }
 
-        // Добавляем/обновляем
+        // Обновляем/добавляем табаки
         foreach (var newTobacco in newTobaccos)
         {
-            var existing = existingOrder.OrderTobaccos
+            var existingTobacco = existingOrder.OrderTobaccos
                 .FirstOrDefault(ot => ot.TobaccoId == newTobacco.TobaccoId);
-            
-            if (existing != null)
+
+            if (existingTobacco != null)
             {
-                // Обновляем существующий
-                context.Entry(existing).CurrentValues.SetValues(newTobacco);
+                // Обновляем только необходимые поля
+                existingTobacco.Percentage = newTobacco.Percentage;
             }
             else
             {
-                // Добавляем новый
+                // Добавляем новый табак
                 existingOrder.OrderTobaccos.Add(new OrderTobacco
                 {
                     TobaccoId = newTobacco.TobaccoId,
-                    Percentage = newTobacco.Percentage
+                    Percentage = newTobacco.Percentage,
+                    OrderId = existingOrder.Id // Важно явно указать OrderId
                 });
             }
         }
     }
+    
 }
