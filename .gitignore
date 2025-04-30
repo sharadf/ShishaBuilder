@@ -486,3 +486,17 @@ $RECYCLE.BIN/
 appsettings.Development.json
 
 appsettings.json
+
+
+
+# Ignore build output folders
+bin/
+obj/
+*.pdb
+*.dll
+*.exe
+*.cache
+*.log
+*.suo
+*.user
+.vs/
