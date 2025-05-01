@@ -37,17 +37,19 @@ public class OrderController : Controller
     }
 
     [HttpGet("SelectHookah")]
-    public async Task<IActionResult> SelectHookah()
+    public async Task<IActionResult> SelectHookah(int tableNumber)
     {
         var hookahs = await hookahService.GetAllHookahsAsync();
+        ViewData["TableNumber"] = tableNumber;
         return View(hookahs);
     }
 
     [HttpGet("SelectTobacco")]
-    public async Task<IActionResult> SelectTobacco(int hookahId)
+    public async Task<IActionResult> SelectTobacco(int hookahId,int tableNumber)
     {
         var tobaccos = await tobaccoService.GetAllTobaccosAsync();
         ViewData["HookahId"] = hookahId;
+        ViewData["TableNumber"] = tableNumber;
         return View(tobaccos);
     }
 
