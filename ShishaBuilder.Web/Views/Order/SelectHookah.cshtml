@@ -31,7 +31,7 @@ else
                     <div class="card-body">
                         <h5 class="card-title">@hookah.ModelName</h5>
                         <p class="card-text"><strong>Company name:</strong> @hookah.CompanyName</p>                    
-                        <a href="@Url.Action("SelectTobacco", "Order", new{hookahId=hookah.Id})" class="btn btn-primary">Select</a>
+                        <a href="@Url.Action("SelectTobacco", "Order", new{hookahId=hookah.Id,tableNumber=ViewData["TableNumber"]})" class="btn btn-primary">Select</a>
 
                     </div>
                 </div>
