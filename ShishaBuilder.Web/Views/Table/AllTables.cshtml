@@ -30,15 +30,6 @@
                 <div class="card-body">
                     <h5 class="card-title">Table #@table.TableNumber</h5>
 
-                    @* <!-- Status Icon with tooltip -->
-                    <div class="mb-2">
-                        <span title="@(table.IsBusy ? "Busy" : "Free")"
-                              class="status-indicator @(table.IsBusy ? "busy" : "free")">
-                        </span>
-                        <span class="ms-2 fw-bold">
-                            @(table.IsBusy ? "Busy" : "Free")
-                        </span>
-                    </div> *@
 
     <p>
         <strong>Status:</strong> 
@@ -62,6 +53,9 @@
                         <div class="d-flex justify-content-between">
                             <!-- Edit button -->
                             <a asp-action="Edit" asp-route-id="@table.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-controller="Order" asp-action="AllOrders" asp-route-tableNumber="@table.TableNumber" class="btn btn-info btn-sm">
+                                Orders
+                            </a>
                             <!-- Soft delete button -->
                             <form asp-action="SoftDelete" method="post" asp-route-id="@table.Id" style="display:inline;">
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
