@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ShishaBuilder.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dc67ea7e7162a1126028a80e14a6bdbf558bfd0a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+36a1a6a177b8f7dfcb936607e0e19ec3dc9605ed")]
 [assembly: System.Reflection.AssemblyProductAttribute("ShishaBuilder.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ShishaBuilder.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

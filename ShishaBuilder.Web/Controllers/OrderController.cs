@@ -135,9 +135,16 @@ public class OrderController : Controller
     }
 
     [HttpGet("AllOrders")]
-    public async Task<IActionResult> AllOrders()
+    public async Task<IActionResult> AllOrders(int? tableNumber)
     {
+
         var orders = await orderService.GetAllOrdersAsync();
+        if (tableNumber.HasValue)
+        {
+            var table = await tableService.GetByTableNumber(tableNumber.Value);
+            orders = orders.Where(o => o.TableId == table.Id).ToList();
+        }
+
         var result = new List<AllOrdersViewModelDto>();
 
         foreach (var order in orders)
@@ -175,9 +182,36 @@ public class OrderController : Controller
     }
 
     [HttpGet("OrderDetails/{orderId}")]
-    public async Task<IActionResult> OrderDetails(int orderId)
+public async Task<IActionResult> OrderDetails(int orderId)
+{
+    var order = await orderService.GetOrderByIdAsync(orderId);
+
+    var tobaccoDetails = new List<TobaccoShowInfoViewModelDto>();
+    foreach (var ot in order.OrderTobaccos)
     {
-        var order = await orderService.GetOrderByIdAsync(orderId);
-        return View(order);
+        var tobacco = await tobaccoService.GetTobaccoByIdAsync(ot.TobaccoId);
+        tobaccoDetails.Add(new TobaccoShowInfoViewModelDto
+        {
+            Name = tobacco.Name,
+            Brand = tobacco.Brand,
+            Percentage = ot.Percentage
+        });
     }
+
+    var orderDetails = new OrderDetailsViewModelDto
+    {
+        OrderId = order.Id,
+        Hookah = await hookahService.GetByIdHookahAsync(order.HookahId),
+        Table = await tableService.GetByIdTableAsync(order.TableId),
+        CreatedAt = order.CreatedAt,
+        OrderStatus = order.OrderStatus,
+        Master = order.MasterId != 0
+            ? await masterService.GetMasterByIdAsync(order.MasterId)
+            : null,
+        OrderTobaccos = tobaccoDetails
+    };
+
+    return View(orderDetails);
+}
+
 }
