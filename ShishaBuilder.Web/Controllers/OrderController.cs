@@ -47,6 +47,18 @@ public class OrderController : Controller
     public async Task<IActionResult> SelectTobacco(int hookahId,int tableNumber)
     {
         var tobaccos = await tobaccoService.GetAllTobaccosAsync();
+        var totalOrders = await orderService.GetTotalOrdersCountAsync();
+        var usage = await orderService.GetTobaccoUsageStatsAsync();
+        foreach (var t in tobaccos)
+        {
+            t.SelectionRate = totalOrders > 0
+                ? Math.Round((usage.GetValueOrDefault(t.Id, 0) * 100.0) / totalOrders, 1)
+                : 0;
+        }
+        tobaccos = tobaccos
+            .OrderByDescending(t => t.SelectionRate)
+            .ThenBy(t => t.Name) // вторичная сортировка по имени (если нужно)
+            .ToList();
         ViewData["HookahId"] = hookahId;
         ViewData["TableNumber"] = tableNumber;
         return View(tobaccos);
@@ -129,8 +141,9 @@ public class OrderController : Controller
     }
 
     [HttpGet("OrderSuccess")]
-    public IActionResult OrderSuccess()
+    public IActionResult OrderSuccess(int orderId)
     {
+        ViewBag.OrderId=orderId;
         return View();
     }
 
@@ -182,36 +195,36 @@ public class OrderController : Controller
     }
 
     [HttpGet("OrderDetails/{orderId}")]
-public async Task<IActionResult> OrderDetails(int orderId)
-{
-    var order = await orderService.GetOrderByIdAsync(orderId);
-
-    var tobaccoDetails = new List<TobaccoShowInfoViewModelDto>();
-    foreach (var ot in order.OrderTobaccos)
+    public async Task<IActionResult> OrderDetails(int orderId)
     {
-        var tobacco = await tobaccoService.GetTobaccoByIdAsync(ot.TobaccoId);
-        tobaccoDetails.Add(new TobaccoShowInfoViewModelDto
+        var order = await orderService.GetOrderByIdAsync(orderId);
+
+        var tobaccoDetails = new List<TobaccoShowInfoViewModelDto>();
+        foreach (var ot in order.OrderTobaccos)
         {
-            Name = tobacco.Name,
-            Brand = tobacco.Brand,
-            Percentage = ot.Percentage
-        });
+            var tobacco = await tobaccoService.GetTobaccoByIdAsync(ot.TobaccoId);
+            tobaccoDetails.Add(new TobaccoShowInfoViewModelDto
+            {
+                Name = tobacco.Name,
+                Brand = tobacco.Brand,
+                Percentage = ot.Percentage
+            });
+        }
+
+        var orderDetails = new OrderDetailsViewModelDto
+        {
+            OrderId = order.Id,
+            Hookah = await hookahService.GetByIdHookahAsync(order.HookahId),
+            Table = await tableService.GetByIdTableAsync(order.TableId),
+            CreatedAt = order.CreatedAt,
+            OrderStatus = order.OrderStatus,
+            Master = order.MasterId != 0
+                ? await masterService.GetMasterByIdAsync(order.MasterId)
+                : null,
+            OrderTobaccos = tobaccoDetails
+        };
+
+        return View(orderDetails);
     }
-
-    var orderDetails = new OrderDetailsViewModelDto
-    {
-        OrderId = order.Id,
-        Hookah = await hookahService.GetByIdHookahAsync(order.HookahId),
-        Table = await tableService.GetByIdTableAsync(order.TableId),
-        CreatedAt = order.CreatedAt,
-        OrderStatus = order.OrderStatus,
-        Master = order.MasterId != 0
-            ? await masterService.GetMasterByIdAsync(order.MasterId)
-            : null,
-        OrderTobaccos = tobaccoDetails
-    };
-
-    return View(orderDetails);
-}
 
 }

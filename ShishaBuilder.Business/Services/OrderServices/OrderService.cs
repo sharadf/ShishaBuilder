@@ -40,4 +40,14 @@ public class OrderService : IOrderService
     {
         await orderRepository.UpdateOrderAsync(order);
     }
+    public async Task<int> GetTotalOrdersCountAsync()
+    {
+        return await orderRepository.GetTotalOrdersCountAsync();
+    }
+
+    public async Task<Dictionary<int, int>> GetTobaccoUsageStatsAsync()
+    {
+        return await orderRepository.GetTobaccoUsageStatsAsync();
+    }
+
 }
