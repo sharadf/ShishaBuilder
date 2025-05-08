@@ -95,6 +95,9 @@ namespace ShishaBuilder.Core.Migrations
                     b.Property<int>("Percentage")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("Rating")
+                        .HasColumnType("integer");
+
                     b.Property<int>("TobaccoId")
                         .HasColumnType("integer");
 

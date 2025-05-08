@@ -12,8 +12,8 @@ using ShishaBuilder.Core.DB;
 namespace ShishaBuilder.Core.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250429191748_Fix_OrderTobacco_Id_Generation")]
-    partial class Fix_OrderTobacco_Id_Generation
+    [Migration("20250507224100_AddMastersTable")]
+    partial class AddMastersTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,6 +96,9 @@ namespace ShishaBuilder.Core.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("Percentage")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Rating")
                         .HasColumnType("integer");
 
                     b.Property<int>("TobaccoId")

@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace ShishaBuilder.Core.Models;
 
 public class Tobacco
@@ -8,6 +10,9 @@ public class Tobacco
     public string? Brand { get; set; }
     public string? Flavor { get; set; }
     public required string Strength { get; set; }
-
     public bool IsDeleted { get; set; } = false;
+    
+    [NotMapped]
+    public double SelectionRate { get; set; } 
+
 }

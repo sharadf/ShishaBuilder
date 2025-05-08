@@ -43,7 +43,10 @@
                             <p class="card-text text-muted small mb-2">
                                 @tobacco.Brand • @tobacco.Flavor • @tobacco.Strength
                             </p>
-                            
+                            <p class="tobacco-selection-rate small mb-2">
+                                This tobacco is chosen by approximately <strong>@tobacco.SelectionRate.ToString("0.0")%</strong> of customers
+                            </p>
+
                             <div class="btn-group w-100">
                                 @foreach (var percent in new[] { 25, 50, 75, 100 })
                                 {
@@ -108,6 +111,10 @@
     font-size: 0.875rem;
     border-right: none;
     background-color: #f8f9fa;
+}
+.tobacco-selection-rate {
+    font-style: italic;
+    color: #b83110; /* или любой другой */
 }
 </style>
 

@@ -32,6 +32,9 @@
                     <p class="card-text"><strong>Brand:</strong> @tobacco.Brand</p>
                     <p class="card-text"><strong>Flavor:</strong> @tobacco.Flavor</p>
                     <p class="card-text"><strong>Strength:</strong> @tobacco.Strength</p>
+                    <p class="tobacco-selection-rate small mb-2">
+                        This tobacco is chosen by approximately <strong>@tobacco.SelectionRate.ToString("0.0")%</strong> of customers
+                    </p>
                     @if(ViewBag.ShowDeleted != true)
                     {
                         <div class="d-flex justify-content-between">
@@ -48,3 +51,11 @@
         </div>
     }
 </div>
+
+<style>
+    
+.tobacco-selection-rate {
+font-style: italic;
+color: #b83110; /* или любой другой */
+}
+</style>

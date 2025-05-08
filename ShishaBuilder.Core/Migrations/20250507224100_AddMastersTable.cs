@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ShishaBuilder.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class Fix_OrderTobacco_Id_Generation : Migration
+    public partial class AddMastersTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -72,7 +72,8 @@ namespace ShishaBuilder.Core.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     OrderId = table.Column<int>(type: "integer", nullable: false),
                     TobaccoId = table.Column<int>(type: "integer", nullable: false),
-                    Percentage = table.Column<int>(type: "integer", nullable: false)
+                    Percentage = table.Column<int>(type: "integer", nullable: false),
+                    Rating = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
