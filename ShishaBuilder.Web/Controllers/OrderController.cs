@@ -49,6 +49,8 @@ public class OrderController : Controller
         var tobaccos = await tobaccoService.GetAllTobaccosAsync();
         var totalOrders = await orderService.GetTotalOrdersCountAsync();
         var usage = await orderService.GetTobaccoUsageStatsAsync();
+
+        var allBrands = tobaccos.Select(t => t.Brand).Distinct().OrderBy(b => b).ToList();
         foreach (var t in tobaccos)
         {
             t.SelectionRate = totalOrders > 0
@@ -59,6 +61,8 @@ public class OrderController : Controller
             .OrderByDescending(t => t.SelectionRate)
             .ThenBy(t => t.Name) // вторичная сортировка по имени (если нужно)
             .ToList();
+            
+        ViewData["Brands"] = allBrands;
         ViewData["HookahId"] = hookahId;
         ViewData["TableNumber"] = tableNumber;
         return View(tobaccos);
