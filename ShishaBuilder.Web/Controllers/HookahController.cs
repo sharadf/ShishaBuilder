@@ -5,7 +5,7 @@ using ShishaBuilder.Core.Models;
 
 namespace ShishaBuilder.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("[controller]")]
     public class HookahController : Controller
     {

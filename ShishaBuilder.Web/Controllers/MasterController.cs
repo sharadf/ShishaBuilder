@@ -7,7 +7,7 @@ using ShishaBuilder.Core.Services.MasterServices;
  
 namespace ShishaBuilder.Web.Controllers;
  
-[Authorize]
+[Authorize(Roles = "Admin")]
 [Route("[controller]")]
 public class MasterController : Controller
 {

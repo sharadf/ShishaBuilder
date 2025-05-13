@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-
 using ShishaBuilder.Core.Dtos;
 using ShishaBuilder.Core.Enums;
 using ShishaBuilder.Core.Models;
@@ -16,18 +15,19 @@ using ShishaBuilder.Core.Services.TobaccoServices;
 
 namespace ShishaBuilder.Web.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin")]
 [Route("[controller]")]
 public class TobaccoController : Controller
 {
     private ITobaccoService tobaccoService;
     private IBlobService blobService;
-    
-    private string containerName="tobaccos";
-    public TobaccoController(ITobaccoService tobaccoService,IBlobService blobService)
+
+    private string containerName = "tobaccos";
+
+    public TobaccoController(ITobaccoService tobaccoService, IBlobService blobService)
     {
-        this.tobaccoService=tobaccoService;
-        this.blobService=blobService;
+        this.tobaccoService = tobaccoService;
+        this.blobService = blobService;
     }
 
     [HttpGet("Create")]
@@ -36,7 +36,7 @@ public class TobaccoController : Controller
         ViewBag.StrengthLevels = GetStrengthLevels();
         return View();
     }
-    
+
     [HttpPost("Create")]
     public async Task<ActionResult> Create(CreateTobaccoViewModel model)
     {
@@ -49,7 +49,7 @@ public class TobaccoController : Controller
         string? imageUrl = null;
         if (model.ImageFile != null && model.ImageFile.Length > 0)
         {
-            imageUrl = await blobService.UploadPhotoAsync(model.ImageFile, containerName); 
+            imageUrl = await blobService.UploadPhotoAsync(model.ImageFile, containerName);
         }
 
         var tobacco = new Tobacco
@@ -58,13 +58,12 @@ public class TobaccoController : Controller
             Brand = model.Brand,
             Flavor = model.Flavor,
             Strength = model.Strength,
-            ImageUrl = imageUrl
+            ImageUrl = imageUrl,
         };
 
         await tobaccoService.AddTobaccoAsync(tobacco);
         return RedirectToAction("AllTobaccos");
     }
-
 
     private List<string> GetStrengthLevels()
     {
@@ -74,19 +73,19 @@ public class TobaccoController : Controller
     [HttpGet("AllTobaccos")]
     public async Task<ActionResult> AllTobaccos()
     {
-        var tobaccos=await tobaccoService.GetAllTobaccosAsync();
+        var tobaccos = await tobaccoService.GetAllTobaccosAsync();
         return View(tobaccos);
     }
 
-    [HttpGet ("DeletedTobaccos")]
+    [HttpGet("DeletedTobaccos")]
     public async Task<IActionResult> DeletedTobaccos()
     {
         var deleted = await tobaccoService.GetAllDeletedTobaccosAsync();
         ViewBag.ShowDeleted = true;
-        return View("AllTobaccos", deleted); 
+        return View("AllTobaccos", deleted);
     }
 
-    [HttpGet ("Edit")]
+    [HttpGet("Edit")]
     public async Task<IActionResult> Edit(int id)
     {
         var tobacco = await tobaccoService.GetTobaccoByIdAsync(id);
@@ -100,7 +99,7 @@ public class TobaccoController : Controller
             Name = tobacco.Name,
             Brand = tobacco.Brand,
             Flavor = tobacco.Flavor,
-            Strength = tobacco.Strength
+            Strength = tobacco.Strength,
         };
 
         ViewBag.TobaccoId = tobacco.Id;
@@ -120,7 +119,6 @@ public class TobaccoController : Controller
         if (tobacco == null || tobacco.IsDeleted)
             return NotFound();
 
-        
         tobacco.Name = model.Name;
         tobacco.Brand = model.Brand;
         tobacco.Flavor = model.Flavor;
@@ -128,7 +126,7 @@ public class TobaccoController : Controller
 
         if (model.ImageFile != null && model.ImageFile.Length > 0)
         {
-            var imageUrl = await blobService.UploadPhotoAsync(model.ImageFile,containerName);
+            var imageUrl = await blobService.UploadPhotoAsync(model.ImageFile, containerName);
             tobacco.ImageUrl = imageUrl;
         }
 
@@ -137,11 +135,10 @@ public class TobaccoController : Controller
         return RedirectToAction("AllTobaccos");
     }
 
-    [HttpPost("SoftDelete")] 
+    [HttpPost("SoftDelete")]
     public async Task<IActionResult> SoftDelete(int id)
     {
         await tobaccoService.SoftDeleteTobaccoAsync(id);
         return RedirectToAction("AllTobaccos");
     }
-
 }

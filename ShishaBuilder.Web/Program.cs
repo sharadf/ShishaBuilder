@@ -1,5 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ShishaBuilder.Business.Repositories;
 using ShishaBuilder.Business.Repositories.HookahRepositories;
@@ -9,61 +11,62 @@ using ShishaBuilder.Business.Services.BlobServices;
 using ShishaBuilder.Business.Services.HookahServices;
 using ShishaBuilder.Business.Services.MasterServices;
 using ShishaBuilder.Business.Services.TobaccoServices;
+using ShishaBuilder.Core.Data;
+using ShishaBuilder.Core.DB;
+using ShishaBuilder.Core.Models;
 using ShishaBuilder.Core.Repositories;
 using ShishaBuilder.Core.Repositories.HookahRepositories;
 using ShishaBuilder.Core.Repositories.MasterRepositories;
 using ShishaBuilder.Core.Repositories.TableRepositories;
+using ShishaBuilder.Core.Seeding;
 using ShishaBuilder.Core.Services.MasterServices;
 using ShishaBuilder.Core.Services.TableServices;
 using ShishaBuilder.Core.Services.TobaccoServices;
 using ShishaBuilder.Core.Settings;
-using ShishaBuilder.Core.Validation;
 using ShishaBuilder.Core.Validation.HookahValidations;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder
+    .Services.AddIdentity<AppUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContextIdentity>()
+    .AddDefaultTokenProviders();
 
-builder.Services.AddAuthentication("MyCookieAuthScheme")
-    .AddCookie("MyCookieAuthScheme", options =>
+builder
+    .Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
     {
         options.LoginPath = "/Account/Login";
-        options.LogoutPath = "/Account/Logout";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+        options.ExpireTimeSpan = TimeSpan.FromHours(1);
+        options.SlidingExpiration = true;
     });
+
 
 builder.Services.AddAuthorization();
 
-
-builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddDbContext<AppDbContextIdentity>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionJamal");
+    options.UseNpgsql(connectionString);
+});
 
 builder.Services.AddScoped<IHookahRepository, HookahRepository>();
 builder.Services.AddScoped<IHookahService, HookahService>();
-
 builder.Services.AddScoped<ITableRepository, TableRepository>();
 builder.Services.AddScoped<ITableService, TableService>();
 
 builder.Services.Configure<BlobSettings>(builder.Configuration.GetSection("AzureBlobStorage"));
-
-builder.Services.AddScoped(sp =>
-    sp.GetRequiredService<IConfiguration>().GetSection("AzureBlobStorage").Get<BlobSettings>()
-);
-
-
 builder.Services.AddScoped<IBlobService, BlobService>();
-
-builder.Services.AddDbContext<ShishaBuilder.Core.Data.AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-);
-
-builder.Services.AddDbContext<ShishaBuilder.Core.DB.AppDbContext>(options =>
-{
-    var coonectionString = builder.Configuration.GetConnectionString("DefaultConnectionJamal");
-    options.UseNpgsql(coonectionString);
-});
-
-builder.Services.Configure<BlobSettings>(builder.Configuration.GetSection("AzureBlobStorage"));
 
 builder.Services.AddScoped<ITobaccoRepository, TobaccoRepository>();
 builder.Services.AddScoped<ITobaccoService, TobaccoService>();
@@ -71,39 +74,31 @@ builder.Services.AddScoped<ITobaccoService, TobaccoService>();
 builder.Services.AddScoped<IMasterRepository, MasterRepository>();
 builder.Services.AddScoped<IMasterService, MasterService>();
 
-builder.Services.AddScoped<IBlobService, BlobService>();
-
-builder.Services.AddControllersWithViews();
-
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
-
 builder.Services.AddValidatorsFromAssemblyContaining<CreateHookahValidator>();
 
-builder.Services.AddValidatorsFromAssemblyContaining<EditHookahValidator>();
+// builder.Services.AddScoped<IAccountService, AccountService>();
 
-builder.Services.AddValidatorsFromAssemblyContaining<CreateTobaccoViewModelValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<AdminRegistrationValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<MasterRegistrationValidator>();
+builder.Services.AddFluentValidationAutoValidation();
 
-builder.Services.AddValidatorsFromAssemblyContaining<CreateTableValidator>();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseAuthentication();
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await AppDbSeeder.SeedRolesAsync(services);
+}
 
-app.UseAuthorization();
-
-app.UseSwagger();
-app.UseSwaggerUI();
-
-app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
-app.UseDeveloperExceptionPage();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
 
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 

@@ -7,9 +7,9 @@ namespace ShishaBuilder.Business.Repositories.HookahRepositories;
 
 public class HookahRepository : IHookahRepository
 {
-    private readonly AppDbContext context;
+    private readonly AppDbContextIdentity context;
 
-    public HookahRepository(AppDbContext context)
+    public HookahRepository(AppDbContextIdentity context)
     {
         this.context = context;
     }
