@@ -13,7 +13,12 @@
     <div class="alert alert-danger">@ViewBag.Error</div>
 }
 
-<form asp-action="RegisterMaster" method="post">
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">@ViewBag.Success</div>
+}
+
+<form asp-action="RegisterMaster" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label asp-for="Login"></label>
         <input asp-for="Login" class="form-control" />
@@ -54,8 +59,11 @@
         <span asp-validation-for="Gender" class="text-danger"></span>
     </div>
 
-    <!-- скрытое поле с ролью Master -->
-    @* <input type="hidden" asp-for="Role" value="Master" /> *@
+    <div class="form-group">
+        <label asp-for="ImageFile">Profile Photo</label>
+        <input asp-for="ImageFile" type="file" class="form-control" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
 
     <button type="submit" class="btn btn-primary">Sign up as Master</button>
 </form>

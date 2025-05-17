@@ -1,21 +1,20 @@
 @model IEnumerable<ShishaBuilder.Core.Models.Master>
 
-<h2>@ViewData["Title"]</h2>
+@{
+    ViewData["Title"] = "Masters";
+    var showDeleted = ViewBag.ShowDeleted == true;
+}
+
+<h2>@(showDeleted ? "Deleted Masters" : "All Masters")</h2>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>@(ViewBag.ShowDeleted == true ? "Deleted Masters" : "All Masters")</h2>
-
-    @if (ViewBag.ShowDeleted == true)
+    @if (showDeleted)
     {
-        <a asp-action="AllMasters" class="btn btn-outline-primary">
-            Show Active
-        </a>
+        <a asp-action="AllMasters" class="btn btn-outline-primary">Show Active</a>
     }
     else
     {
-        <a asp-action="DeletedMasters" class="btn btn-outline-secondary">
-            Show Deleted
-        </a>
+        <a asp-action="DeletedMasters" class="btn btn-outline-secondary">Show Deleted</a>
     }
 </div>
 
@@ -24,19 +23,20 @@
     {
         <div class="col-md-4 mb-4">
             <div class="card shadow">
-                <img src="@master.PhotoUrl" class="card-img-top" alt="@master.FirstName" style="height: 300px; object-fit: cover;" />
+                <img src="@master.PhotoUrl" class="card-img-top" alt="@master.AppUser?.FullName" style="height: 300px; object-fit: cover;" />
+                
                 <div class="card-body">
-                    <h5 class="card-title">@master.FirstName @master.LastName</h5>
-                    <p class="card-text text-dark">@master.PhoneNumber</p>
-                    <p class="card-text text-muted">Master</p>
-                    
-                    @if(ViewBag.ShowDeleted!=true)
+                    <h5 class="card-title">@master.AppUser?.FullName</h5>
+                    <p class="card-text"><strong>Age:</strong> @master.AppUser?.Age</p>
+                    <p class="card-text"><strong>Experience:</strong> @master.AppUser?.ExperienceYears years</p>
+                    <p class="card-text"><strong>Phone:</strong> @master.AppUser?.PhoneNumber</p>
+                    <p class="card-text text-muted">Status: @(master.IsActive ? "Active" : "Inactive")</p>
+
+                    @if (!showDeleted)
                     {
                         <div class="d-flex justify-content-between">
-                            <!-- Edit button -->
                             <a asp-action="Edit" asp-route-id="@master.Id" class="btn btn-warning btn-sm">Edit</a>
 
-                            <!-- Soft delete button -->
                             <form asp-action="SoftDelete" method="post" asp-route-id="@master.Id" style="display:inline;">
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>

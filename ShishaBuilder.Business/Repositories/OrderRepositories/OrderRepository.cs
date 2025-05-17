@@ -47,6 +47,20 @@ public class OrderRepository : IOrderRepository
             .FirstOrDefaultAsync(o => o.Id == id);
     }
 
+    public async Task<int> GetTotalOrdersCountAsync()
+    {
+        return await context.Orders.CountAsync();
+    }
+
+    public async Task<Dictionary<int, int>> GetTobaccoUsageStatsAsync()
+    {
+        return await context.OrderTobaccos
+            .GroupBy(x => x.TobaccoId)
+            .Select(g => new { g.Key, Count = g.Count() })
+            .ToDictionaryAsync(x => x.Key, x => x.Count);
+    }
+
+
     public async Task UpdateOrderAsync(Order order)
     {
         using var transaction = await context.Database.BeginTransactionAsync();

@@ -44,7 +44,7 @@
                                 }
                                 else
                                 {
-                                    @order.Master.FirstName @order.Master.LastName
+                                    @order.Master.AppUser.FullName
                                 }
                             </td>
                             <td>
@@ -78,14 +78,15 @@
     {
         return status switch
         {
-            OrderStatus.Completed => "badge-success",
-            OrderStatus.InProgress => "badge-primary",
-            OrderStatus.Pending => "badge-warning",
-            OrderStatus.Cancelled => "badge-danger",
-            _ => "badge-secondary"
+            OrderStatus.Completed => "badge bg-success",
+            OrderStatus.InProgress => "badge bg-primary",
+            OrderStatus.Pending => "badge bg-warning text-dark",
+            OrderStatus.Cancelled => "badge bg-danger",
+            _ => "badge bg-dark" // вместо серого — чёрный
         };
     }
 }
+
 
 <style>
     .table th {

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using ShishaBuilder.Core.Data;
+using ShishaBuilder.Core.DB;
 using ShishaBuilder.Core.Models;
 using ShishaBuilder.Core.Repositories.TableRepositories;
 
@@ -8,9 +8,9 @@ namespace ShishaBuilder.Business.Repositories.TableRepositories;
 
 public class TableRepository : ITableRepository
 {
-    private readonly AppDbContextIdentity context;
+    private readonly AppDbContext context;
 
-    public TableRepository(AppDbContextIdentity context)
+    public TableRepository(AppDbContext context)
     {
         this.context = context;
     }

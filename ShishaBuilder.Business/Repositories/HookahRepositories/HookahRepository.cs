@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ShishaBuilder.Core.Data;
+using ShishaBuilder.Core.DB;
 using ShishaBuilder.Core.Models;
 using ShishaBuilder.Core.Repositories.HookahRepositories;
 
@@ -7,9 +7,9 @@ namespace ShishaBuilder.Business.Repositories.HookahRepositories;
 
 public class HookahRepository : IHookahRepository
 {
-    private readonly AppDbContextIdentity context;
+    private readonly AppDbContext context;
 
-    public HookahRepository(AppDbContextIdentity context)
+    public HookahRepository(AppDbContext context)
     {
         this.context = context;
     }

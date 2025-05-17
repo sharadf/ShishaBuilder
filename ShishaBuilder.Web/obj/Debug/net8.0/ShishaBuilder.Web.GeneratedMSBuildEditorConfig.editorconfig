@@ -66,12 +66,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFzdGVyXEFsbE1hc3RlcnMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/saraf/OneDrive/Documents/ShishaBuilder/ShishaBuilder.Web/Views/Master/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFzdGVyXENyZWF0ZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/saraf/OneDrive/Documents/ShishaBuilder/ShishaBuilder.Web/Views/Master/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFzdGVyXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/saraf/OneDrive/Documents/ShishaBuilder/ShishaBuilder.Web/Views/Master/MasterPanel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFzdGVyXE1hc3RlclBhbmVsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/saraf/OneDrive/Documents/ShishaBuilder/ShishaBuilder.Web/Views/Order/AllOrders.cshtml]

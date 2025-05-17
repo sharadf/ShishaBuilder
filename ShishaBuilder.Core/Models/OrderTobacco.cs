@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace ShishaBuilder.Core.Models;
-
 public class OrderTobacco
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -20,4 +19,6 @@ public class OrderTobacco
     
     [ForeignKey("TobaccoId")]
     public Tobacco Tobacco { get; set;}
+
+    public int? Rating { get; set;}
 }

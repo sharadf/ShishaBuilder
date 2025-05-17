@@ -11,23 +11,29 @@ using ShishaBuilder.Core.Dtos;
 using ShishaBuilder.Core.Enums;
 using ShishaBuilder.Core.Models;
 using ShishaBuilder.Core.Services.BlobServices;
+using ShishaBuilder.Core.Services.OrderServices;
 using ShishaBuilder.Core.Services.TobaccoServices;
 
 namespace ShishaBuilder.Web.Controllers;
 
-[Authorize(Roles = "Admin")]
+
 [Route("[controller]")]
 public class TobaccoController : Controller
 {
     private ITobaccoService tobaccoService;
     private IBlobService blobService;
-
+    private IOrderService orderService;
     private string containerName = "tobaccos";
 
-    public TobaccoController(ITobaccoService tobaccoService, IBlobService blobService)
+    public TobaccoController(
+        ITobaccoService tobaccoService,
+        IBlobService blobService,
+        IOrderService orderService
+    )
     {
         this.tobaccoService = tobaccoService;
         this.blobService = blobService;
+        this.orderService = orderService;
     }
 
     [HttpGet("Create")]
@@ -74,6 +80,19 @@ public class TobaccoController : Controller
     public async Task<ActionResult> AllTobaccos()
     {
         var tobaccos = await tobaccoService.GetAllTobaccosAsync();
+        var totalOrders = await orderService.GetTotalOrdersCountAsync();
+        var usage = await orderService.GetTobaccoUsageStatsAsync();
+        foreach (var t in tobaccos)
+        {
+            t.SelectionRate =
+                totalOrders > 0
+                    ? Math.Round((usage.GetValueOrDefault(t.Id, 0) * 100.0) / totalOrders, 1)
+                    : 0;
+        }
+        tobaccos = tobaccos
+            .OrderByDescending(t => t.SelectionRate)
+            .ThenBy(t => t.Name) // вторичная сортировка по имени (если нужно)
+            .ToList();
         return View(tobaccos);
     }
 

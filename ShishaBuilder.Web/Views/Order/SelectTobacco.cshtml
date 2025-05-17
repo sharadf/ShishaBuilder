@@ -1,27 +1,52 @@
 @model IEnumerable<ShishaBuilder.Core.Models.Tobacco>
 @{
     var hookahId = (int)ViewData["HookahId"];
+    var brands=(IEnumerable<string>)ViewData["Brands"];
 }
 
 <div class="container py-3">
     <h2 class="text-center mb-4">Customize Your Hookah Mix</h2>
 
-    <form asp-action="PreviewOrder" method="get" class="mb-4">
-        <input type="hidden" name="hookahId" value="@hookahId" />
-        
-        <div class="row mb-3">
-            <div class="col-md-4 mx-auto">
-                <label for="tableNumber" class="form-label">Table Number</label>
-                <input type="number" class="form-control" name="tableNumber" 
-                       min="1" max="20" required>
-            </div>
+    <div class="filter-panel">
+        <div class="input-group">
+            <label class="input-group-text" for="brandFilter">Brand:</label>
+            <select id="brandFilter" class="form-select">
+                <option value="All">All Brands</option>
+                @foreach (var brand in brands)
+                {
+                    <option value="@brand">@brand</option>
+                }
+            </select>
         </div>
 
+        <div class="input-group">
+            <label class="input-group-text" for="strengthFilter">Strength:</label>
+            <select id="strengthFilter" class="form-select">
+                <option value="All">All strengths</option>
+                <option value="None">None</option>
+                <option value="Light">Light</option>
+                <option value="Medium">Medium</option>
+                <option value="Strong">Strong</option>
+                <option value="ExtraStrong">Extra strong</option>
+            </select>
+        </div>
+
+        <button type="button" id="filterSelected" class="btn btn-outline-success">
+            Selected
+        </button>
+    </div>
+
+</div>
+    
+    <form asp-action="PreviewOrder" method="get" class="mb-4">
+        <input type="hidden" name="hookahId" value="@hookahId" />
+        <input type="hidden" name="tableNumber" value="@ViewData["TableNumber"]" />
+        
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             @foreach (var tobacco in Model)
             {
                 <div class="col">
-                    <div class="card h-100">
+                    <div class="card h-100 tobacco-card" data-strength="@tobacco.Strength" data-brand="@tobacco.Brand">
                         <div style="height: 300px; overflow: hidden;">
                             <img src="@tobacco.ImageUrl" class="card-img-top h-100 w-100 object-fit-cover" alt="@tobacco.Name">
                         </div>
@@ -30,7 +55,10 @@
                             <p class="card-text text-muted small mb-2">
                                 @tobacco.Brand • @tobacco.Flavor • @tobacco.Strength
                             </p>
-                            
+                            <p class="tobacco-selection-rate small mb-2">
+                                This tobacco is chosen by approximately <strong>@tobacco.SelectionRate.ToString("0.0")%</strong> of customers
+                            </p>
+
                             <div class="btn-group w-100">
                                 @foreach (var percent in new[] { 25, 50, 75, 100 })
                                 {
@@ -69,32 +97,99 @@
     </form>
 </div>
 
+
+<style>
+
+.filter-panel {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    margin-bottom: 24px;
+}
+
+.filter-panel .input-group {
+    width: 200px;
+}
+
+.filter-panel label {
+    font-size: 0.85rem;
+    background-color: #fff;
+    border-right: 0;
+}
+
+.filter-panel .form-select {
+    font-size: 0.85rem;
+}
+
+.filter-panel .btn {
+    font-size: 0.85rem;
+    padding: 6px 16px;
+    border-radius: 8px;
+}
+
+
+
+#strengthFilter {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    font-size: 0.875rem;
+    color: #495057;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    appearance: none;
+}
+
+#strengthFilter:focus {
+    border-color: #adb5bd;
+    outline: 0;
+    box-shadow: none;
+}
+
+.input-group-text {
+    font-size: 0.875rem;
+    border-right: none;
+    background-color: #f8f9fa;
+}
+.tobacco-selection-rate {
+    font-style: italic;
+    color: #b83110; /* или любой другой */
+}
+</style>
+
 @section Scripts {
 <script>
     document.querySelectorAll('.percentage-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             const tobaccoId = this.dataset.tobaccoid;
             const percent = parseInt(this.dataset.percent);
             const input = document.getElementById(`tobacco-${tobaccoId}`);
-            
-            // Toggle selection
+
             if (parseInt(input.value) === percent) {
                 input.value = 0;
                 this.classList.remove('btn-primary');
                 this.classList.add('btn-outline-secondary');
             } else {
-                // Reset other buttons for this tobacco
                 document.querySelectorAll(`.percentage-btn[data-tobaccoid="${tobaccoId}"]`)
                     .forEach(b => {
                         b.classList.remove('btn-primary');
                         b.classList.add('btn-outline-secondary');
                     });
-                
+
                 input.value = percent;
                 this.classList.add('btn-primary');
                 this.classList.remove('btn-outline-secondary');
             }
-            
+
             updateTotal();
         });
     });
@@ -102,7 +197,7 @@
     function updateTotal() {
         const inputs = document.querySelectorAll('input[id^="tobacco-"]');
         let total = 0;
-        
+
         inputs.forEach(input => {
             total += parseInt(input.value) || 0;
         });
@@ -123,7 +218,55 @@
         } else {
             errorElement.textContent = '';
             submitBtn.disabled = false;
+
+            document.getElementById('submitBtn').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
+
+    // 🔄 Объединённая фильтрация по Strength + Brand
+    const brandSelect = document.getElementById('brandFilter');
+    const strengthSelect = document.getElementById('strengthFilter');
+    const cards = document.querySelectorAll('.tobacco-card');
+
+    function applyFilters() {
+        const selectedBrand = brandSelect.value;
+        const selectedStrength = strengthSelect.value;
+
+        cards.forEach(card => {
+            const cardBrand = card.dataset.brand;
+            const cardStrength = card.dataset.strength;
+
+            const matchBrand = selectedBrand === 'All' || cardBrand === selectedBrand;
+            const matchStrength = selectedStrength === 'All' || cardStrength === selectedStrength;
+
+            card.parentElement.style.display = (matchBrand && matchStrength) ? 'block' : 'none';
+        });
+    }
+
+    brandSelect.addEventListener('change', applyFilters);
+    strengthSelect.addEventListener('change', applyFilters);
+
+    let selectedFilterActive = false;
+
+    document.getElementById('filterSelected').addEventListener('click', function () {
+        if (!selectedFilterActive) {
+            cards.forEach(card => {
+                const input = card.querySelector('input[type="hidden"]');
+                const value = parseInt(input.value) || 0;
+                card.parentElement.style.display = value > 0 ? 'block' : 'none';
+            });
+
+            this.classList.remove('btn-outline-success');
+            this.classList.add('btn-success');
+            this.textContent = 'Show All';
+            selectedFilterActive = true;
+        } else {
+            applyFilters(); // восстановить фильтр по бренду и крепости
+            this.classList.remove('btn-success');
+            this.classList.add('btn-outline-success');
+            this.textContent = 'Selected';
+            selectedFilterActive = false;
+        }
+    });
 </script>
 }

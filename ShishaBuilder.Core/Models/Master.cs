@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace ShishaBuilder.Core.Models;
@@ -5,9 +7,13 @@ namespace ShishaBuilder.Core.Models;
 public class Master
 {
     public int Id { get; set; }
-    public required string FirstName { get; set; }
-    public required string LastName { get; set; }
-    public required string PhoneNumber { get; set; }
-    public bool IsActive { get; set; } = true;
+
+    [Required]
+    public string AppUserId { get; set; } = null!;
+
+    [ForeignKey("AppUserId")]
+    public AppUser AppUser { get; set; } = null!;
+
     public string? PhotoUrl { get; set; }
+    public bool IsActive { get; set; } = true;
 }
