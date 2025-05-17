@@ -500,3 +500,15 @@ obj/
 *.suo
 *.user
 .vs/
+
+
+/bin/
+/obj/
+*.user
+*.suo
+*.dll
+*.pdb
+*.exe
+*.cache
+*.log
+*.vs/
