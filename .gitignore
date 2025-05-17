@@ -489,7 +489,6 @@ appsettings.json
 
 
 
-# Ignore build output folders
 bin/
 obj/
 *.pdb
@@ -500,15 +499,3 @@ obj/
 *.suo
 *.user
 .vs/
-
-
-/bin/
-/obj/
-*.user
-*.suo
-*.dll
-*.pdb
-*.exe
-*.cache
-*.log
-*.vs/
