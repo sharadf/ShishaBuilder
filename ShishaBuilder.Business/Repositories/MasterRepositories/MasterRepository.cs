@@ -11,15 +11,14 @@ public class MasterRepository : IMasterRepository
 
     public MasterRepository(AppDbContext context)
     {
-        this.context=context;
+        this.context = context;
     }
+
     public async Task AddMasterAsync(Master master)
     {
         await context.Masters.AddAsync(master);
         await context.SaveChangesAsync();
     }
-
-
 
     public async Task<IEnumerable<Master>> GetAllMastersAsync()
     {
@@ -28,7 +27,7 @@ public class MasterRepository : IMasterRepository
 
     public async Task<Master?> GetMasterByIdAsync(int id)
     {
-        return await context.Masters.FirstOrDefaultAsync(m => m.Id ==id);
+        return await context.Masters.FirstOrDefaultAsync(m => m.Id == id);
     }
 
     public async Task UpdateMasterAsync(Master master)

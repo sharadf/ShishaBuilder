@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ShishaBuilder.Core.Data;
+using ShishaBuilder.Core.DB;
 using ShishaBuilder.Core.Models;
 using ShishaBuilder.Core.Repositories.HookahRepositories;
 

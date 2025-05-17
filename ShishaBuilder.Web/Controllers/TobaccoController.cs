@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-
 using ShishaBuilder.Core.Dtos;
 using ShishaBuilder.Core.Enums;
 using ShishaBuilder.Core.Models;
@@ -17,19 +16,24 @@ using ShishaBuilder.Core.Services.TobaccoServices;
 
 namespace ShishaBuilder.Web.Controllers;
 
-[Authorize]
+
 [Route("[controller]")]
 public class TobaccoController : Controller
 {
     private ITobaccoService tobaccoService;
     private IBlobService blobService;
     private IOrderService orderService;
-    private string containerName="tobaccos";
-    public TobaccoController(ITobaccoService tobaccoService,IBlobService blobService,IOrderService orderService)
+    private string containerName = "tobaccos";
+
+    public TobaccoController(
+        ITobaccoService tobaccoService,
+        IBlobService blobService,
+        IOrderService orderService
+    )
     {
-        this.tobaccoService=tobaccoService;
-        this.blobService=blobService;
-        this.orderService=orderService;
+        this.tobaccoService = tobaccoService;
+        this.blobService = blobService;
+        this.orderService = orderService;
     }
 
     [HttpGet("Create")]
@@ -38,7 +42,7 @@ public class TobaccoController : Controller
         ViewBag.StrengthLevels = GetStrengthLevels();
         return View();
     }
-    
+
     [HttpPost("Create")]
     public async Task<ActionResult> Create(CreateTobaccoViewModel model)
     {
@@ -51,7 +55,7 @@ public class TobaccoController : Controller
         string? imageUrl = null;
         if (model.ImageFile != null && model.ImageFile.Length > 0)
         {
-            imageUrl = await blobService.UploadPhotoAsync(model.ImageFile, containerName); 
+            imageUrl = await blobService.UploadPhotoAsync(model.ImageFile, containerName);
         }
 
         var tobacco = new Tobacco
@@ -60,13 +64,12 @@ public class TobaccoController : Controller
             Brand = model.Brand,
             Flavor = model.Flavor,
             Strength = model.Strength,
-            ImageUrl = imageUrl
+            ImageUrl = imageUrl,
         };
 
         await tobaccoService.AddTobaccoAsync(tobacco);
         return RedirectToAction("AllTobaccos");
     }
-
 
     private List<string> GetStrengthLevels()
     {
@@ -81,9 +84,10 @@ public class TobaccoController : Controller
         var usage = await orderService.GetTobaccoUsageStatsAsync();
         foreach (var t in tobaccos)
         {
-            t.SelectionRate = totalOrders > 0
-                ? Math.Round((usage.GetValueOrDefault(t.Id, 0) * 100.0) / totalOrders, 1)
-                : 0;
+            t.SelectionRate =
+                totalOrders > 0
+                    ? Math.Round((usage.GetValueOrDefault(t.Id, 0) * 100.0) / totalOrders, 1)
+                    : 0;
         }
         tobaccos = tobaccos
             .OrderByDescending(t => t.SelectionRate)
@@ -92,15 +96,15 @@ public class TobaccoController : Controller
         return View(tobaccos);
     }
 
-    [HttpGet ("DeletedTobaccos")]
+    [HttpGet("DeletedTobaccos")]
     public async Task<IActionResult> DeletedTobaccos()
     {
         var deleted = await tobaccoService.GetAllDeletedTobaccosAsync();
         ViewBag.ShowDeleted = true;
-        return View("AllTobaccos", deleted); 
+        return View("AllTobaccos", deleted);
     }
 
-    [HttpGet ("Edit")]
+    [HttpGet("Edit")]
     public async Task<IActionResult> Edit(int id)
     {
         var tobacco = await tobaccoService.GetTobaccoByIdAsync(id);
@@ -114,7 +118,7 @@ public class TobaccoController : Controller
             Name = tobacco.Name,
             Brand = tobacco.Brand,
             Flavor = tobacco.Flavor,
-            Strength = tobacco.Strength
+            Strength = tobacco.Strength,
         };
 
         ViewBag.TobaccoId = tobacco.Id;
@@ -134,7 +138,6 @@ public class TobaccoController : Controller
         if (tobacco == null || tobacco.IsDeleted)
             return NotFound();
 
-        
         tobacco.Name = model.Name;
         tobacco.Brand = model.Brand;
         tobacco.Flavor = model.Flavor;
@@ -142,7 +145,7 @@ public class TobaccoController : Controller
 
         if (model.ImageFile != null && model.ImageFile.Length > 0)
         {
-            var imageUrl = await blobService.UploadPhotoAsync(model.ImageFile,containerName);
+            var imageUrl = await blobService.UploadPhotoAsync(model.ImageFile, containerName);
             tobacco.ImageUrl = imageUrl;
         }
 
@@ -151,11 +154,10 @@ public class TobaccoController : Controller
         return RedirectToAction("AllTobaccos");
     }
 
-    [HttpPost("SoftDelete")] 
+    [HttpPost("SoftDelete")]
     public async Task<IActionResult> SoftDelete(int id)
     {
         await tobaccoService.SoftDeleteTobaccoAsync(id);
         return RedirectToAction("AllTobaccos");
     }
-
 }

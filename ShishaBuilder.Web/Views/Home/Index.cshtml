@@ -1,7 +1,13 @@
-﻿@{
+﻿ @{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Добро пожаловать в наш кальянный центр!</h1>
-</div>
+</div> 
+
+
+@if (User.IsInRole("Admin"))
+{
+    <p>Добро пожаловать, Админ!</p>
+}

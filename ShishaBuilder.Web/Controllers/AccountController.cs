@@ -1,49 +1,207 @@
-using System.Security.Claims;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
+using ShishaBuilder.Core.DTOs.LoginDtos;
+using ShishaBuilder.Core.Models;
+using ShishaBuilder.Core.Services;
+using ShishaBuilder.Core.Services.MasterServices;
 
-[AllowAnonymous]
 public class AccountController : Controller
 {
-    [HttpGet]
-    public IActionResult Login()
+    // private readonly IAccountService _accountService;
+    private readonly SignInManager<AppUser> signInManager;
+    private readonly UserManager<AppUser> userManager;
+    private IMasterService masterService;
+    private IBlobService blobService;
+    private string containerName = "masters";
+
+    public AccountController(
+        // IAccountService accountService,
+        SignInManager<AppUser> signInManager,
+        UserManager<AppUser> userManager,
+        IMasterService masterService,
+        IBlobService blobService
+    )
+    {
+        // _accountService = accountService;
+        this.signInManager = signInManager;
+        this.userManager = userManager;
+        this.masterService = masterService;
+        this.blobService = blobService;
+    }
+
+    [HttpGet("RegisterAdmin")]
+    public IActionResult RegisterAdmin() => View();
+
+    [Authorize(Roles = "Master")]
+    [HttpGet("MasterPanel")]
+    public IActionResult MasterPanel()
     {
         return View();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Login(string username, string password)
+    [HttpPost("RegisterAdmin")]
+    public async Task<IActionResult> RegisterAdmin([FromForm] AdminRegistrationDto newUser)
     {
-        if (username == "Admin" && password == "123")
+        try
         {
-            var claims = new List<Claim>
+            var user = new AppUser
             {
-                new Claim(ClaimTypes.Name, username),
-                new Claim(ClaimTypes.Role, "Administrator"),
+                Email = newUser.Login,
+                PhoneNumber = newUser.PhoneNumber,
+                UserName = newUser.Login,
             };
 
-            var claimsIdentity = new ClaimsIdentity(claims, "MyCookieAuthScheme");
+            var createResult = await this.userManager.CreateAsync(user, newUser.Password!);
 
-            var authProperties = new AuthenticationProperties { IsPersistent = true };
+            if (!createResult.Succeeded)
+            {
+                var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
+                throw new Exception("User creation failed: " + errors);
+            }
 
-            await HttpContext.SignInAsync(
-                "MyCookieAuthScheme",
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties
-            );
+            var roleResult = await this.userManager.AddToRoleAsync(user, nameof(Roles.Admin));
 
-            return RedirectToAction("Index", "Home");
+            if (!roleResult.Succeeded)
+            {
+                var errors = string.Join(", ", roleResult.Errors.Select(e => e.Description));
+                throw new Exception("Role assignment failed: " + errors);
+            }
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
 
-        ModelState.AddModelError("", "Invalid login attempt.");
-        return View();
+        return RedirectToAction(nameof(Login));
     }
 
-    [HttpPost]
+    [HttpGet("RegisterMaster")]
+    public IActionResult RegisterMaster() => View(new MasterRegistrationDto());
+
+    [HttpPost("RegisterMaster")]
+    public async Task<IActionResult> RegisterMaster([FromForm] MasterRegistrationDto newUser)
+    {
+        try
+        {
+            var existingUser = await userManager.FindByNameAsync(newUser.Login);
+            if (existingUser != null)
+                return BadRequest("Пользователь с таким логином уже существует.");
+
+            // Создание пользователя
+            var user = new AppUser
+            {
+                Email = newUser.Login,
+                UserName = newUser.Login,
+                PhoneNumber = newUser.PhoneNumber,
+                FullName = newUser.FullName,
+                Age = newUser.Age,
+                Gender = newUser.Gender,
+                ExperienceYears = newUser.ExperienceYears,
+                ImageFile = newUser.ImageFile,
+            };
+
+            var createResult = await userManager.CreateAsync(user, newUser.Password!);
+            if (!createResult.Succeeded)
+            {
+                var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
+                throw new Exception("User creation failed: " + errors);
+            }
+
+            var roleResult = await userManager.AddToRoleAsync(user, nameof(Roles.Master));
+            if (!roleResult.Succeeded)
+            {
+                var errors = string.Join(", ", roleResult.Errors.Select(e => e.Description));
+                throw new Exception("Role assignment failed: " + errors);
+            }
+
+            // Обработка фотографии
+            string? imageUrl = null;
+            if (newUser.ImageFile != null && newUser.ImageFile.Length > 0)
+            {
+                imageUrl = await blobService.UploadPhotoAsync(newUser.ImageFile, containerName);
+            }
+            else
+            {
+                imageUrl =
+                    "https://jamal771.blob.core.windows.net/masters/master%20default%20photo.jpg";
+            }
+
+            // Создание Master
+            var master = new Master
+            {
+                AppUserId = user.Id,
+                PhotoUrl = imageUrl,
+                IsActive = true,
+            };
+
+            await masterService.AddMasterAsync(master);
+            TempData["SuccessMessage"] = "Master added successfully!";
+            return RedirectToAction("AllMastersSimple", "Master");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+        return base.RedirectToAction(actionName: "Index", controllerName: "Home");
+    }
+
+    [HttpGet("Login")]
+    public ActionResult Login()
+    {
+        var errorMessage = base.TempData["Error"];
+
+        if (errorMessage != null)
+        {
+            base.ModelState.AddModelError("All", errorMessage.ToString()!);
+        }
+
+        return base.View();
+    }
+
+    [HttpPost("Login")]
+    public async Task<IActionResult> Login([FromForm] LoginDto dto)
+    {
+        var user = await userManager.FindByNameAsync(dto.Login);
+
+        if (user == null)
+        {
+            base.TempData["Error"] = "Incorrect login or password";
+            return base.RedirectToAction(actionName: nameof(Login));
+        }
+
+        var result = await signInManager.PasswordSignInAsync(
+            user,
+            dto.Password,
+            isPersistent: false,
+            lockoutOnFailure: false
+        );
+
+        if (result.Succeeded == false)
+        {
+            base.TempData["Error"] = "Incorrect login or password";
+            return base.RedirectToAction(actionName: nameof(Login));
+        }
+
+        return base.RedirectToAction(actionName: "Index", controllerName: "Home");
+    }
+
+    [HttpGet]
     public async Task<IActionResult> Logout()
     {
-        await HttpContext.SignOutAsync("MyCookieAuthScheme");
-        return RedirectToAction("Index", "Home");
+        await signInManager.SignOutAsync();
+        return base.RedirectToAction(actionName: "Index", controllerName: "Home");
     }
 }
+
+
+//postgrest image
+//sql server image
+//custom image - dotnet sdk: dockerFile
+//dotnet run time - start of project
+//

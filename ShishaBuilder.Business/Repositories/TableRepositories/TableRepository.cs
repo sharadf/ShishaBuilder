@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using ShishaBuilder.Core.Data;
+using ShishaBuilder.Core.DB;
 using ShishaBuilder.Core.Models;
 using ShishaBuilder.Core.Repositories.TableRepositories;
 
@@ -33,7 +33,7 @@ public class TableRepository : ITableRepository
 
         if (exists)
             throw new Exception("Table with this number already exists.");
-            
+
         context.Tables.Add(createTable);
         await context.SaveChangesAsync();
     }
@@ -46,8 +46,6 @@ public class TableRepository : ITableRepository
 
     public async Task<Core.Models.Table> GetByTableNumber(int tableNumber)
     {
-        return await context.Tables.FirstOrDefaultAsync(t=>
-            t.TableNumber==tableNumber);
-        
+        return await context.Tables.FirstOrDefaultAsync(t => t.TableNumber == tableNumber);
     }
 }

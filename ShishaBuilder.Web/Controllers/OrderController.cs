@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 using ShishaBuilder.Core.DTOs.OrderDtos;
 using ShishaBuilder.Core.DTOs.TobaccoDtos;
 using ShishaBuilder.Core.Enums;
@@ -26,7 +25,8 @@ public class OrderController : Controller
         ITobaccoService tobaccoService,
         ITableService tableService,
         IOrderService orderService,
-        IMasterService masterService)
+        IMasterService masterService
+    )
     {
         this.hookahService = hookahService;
         this.tobaccoService = tobaccoService;
@@ -44,7 +44,7 @@ public class OrderController : Controller
     }
 
     [HttpGet("SelectTobacco")]
-    public async Task<IActionResult> SelectTobacco(int hookahId,int tableNumber)
+    public async Task<IActionResult> SelectTobacco(int hookahId, int tableNumber)
     {
         var tobaccos = await tobaccoService.GetAllTobaccosAsync();
         var totalOrders = await orderService.GetTotalOrdersCountAsync();
@@ -53,15 +53,15 @@ public class OrderController : Controller
         var allBrands = tobaccos.Select(t => t.Brand).Distinct().OrderBy(b => b).ToList();
         foreach (var t in tobaccos)
         {
-            t.SelectionRate = totalOrders > 0
-                ? Math.Round((usage.GetValueOrDefault(t.Id, 0) * 100.0) / totalOrders, 1)
-                : 0;
+            t.SelectionRate =
+                totalOrders > 0
+                    ? Math.Round((usage.GetValueOrDefault(t.Id, 0) * 100.0) / totalOrders, 1)
+                    : 0;
         }
         tobaccos = tobaccos
             .OrderByDescending(t => t.SelectionRate)
             .ThenBy(t => t.Name) // вторичная сортировка по имени (если нужно)
             .ToList();
-            
         ViewData["Brands"] = allBrands;
         ViewData["HookahId"] = hookahId;
         ViewData["TableNumber"] = tableNumber;
@@ -72,7 +72,8 @@ public class OrderController : Controller
     public async Task<IActionResult> PreviewOrder(
         int hookahId,
         int tableNumber,
-        [FromQuery] Dictionary<int, int> tobaccoPercentages)
+        [FromQuery] Dictionary<int, int> tobaccoPercentages
+    )
     {
         var validPercentages = tobaccoPercentages
             .Where(x => x.Value > 0)
@@ -90,22 +91,26 @@ public class OrderController : Controller
         foreach (var (tobaccoId, percentage) in validPercentages)
         {
             var tobacco = await tobaccoService.GetTobaccoByIdAsync(tobaccoId);
-            tobaccoMix.Add(new TobaccoPercentageDto
-            {
-                TobaccoId = tobaccoId,
-                TobaccoName = tobacco.Name,
-                Brand = tobacco.Brand,
-                Percentage = percentage
-            });
+            tobaccoMix.Add(
+                new TobaccoPercentageDto
+                {
+                    TobaccoId = tobaccoId,
+                    TobaccoName = tobacco.Name,
+                    Brand = tobacco.Brand,
+                    Percentage = percentage,
+                }
+            );
         }
 
-        return View(new OrderPreviewViewModelDto
-        {
-            Hookah = hookah,
-            Table = table,
-            TobaccoMix = tobaccoMix,
-            TobaccoPercentages = validPercentages
-        });
+        return View(
+            new OrderPreviewViewModelDto
+            {
+                Hookah = hookah,
+                Table = table,
+                TobaccoMix = tobaccoMix,
+                TobaccoPercentages = validPercentages,
+            }
+        );
     }
 
     [HttpPost("CreateOrder")]
@@ -121,16 +126,14 @@ public class OrderController : Controller
             HookahId = model.Hookah.Id,
             TableId = model.Table.Id,
             CreatedAt = DateTime.UtcNow,
-            OrderStatus = OrderStatus.Pending
+            OrderStatus = OrderStatus.Pending,
         };
 
         foreach (var (tobaccoId, percentage) in model.TobaccoPercentages)
         {
-            order.OrderTobaccos.Add(new OrderTobacco
-            {
-                TobaccoId = tobaccoId,
-                Percentage = percentage
-            });
+            order.OrderTobaccos.Add(
+                new OrderTobacco { TobaccoId = tobaccoId, Percentage = percentage }
+            );
         }
 
         try
@@ -147,7 +150,7 @@ public class OrderController : Controller
     [HttpGet("OrderSuccess")]
     public IActionResult OrderSuccess(int orderId)
     {
-        ViewBag.OrderId=orderId;
+        ViewBag.OrderId = orderId;
         return View();
     }
 
@@ -167,32 +170,35 @@ public class OrderController : Controller
         foreach (var order in orders)
         {
             var table = await tableService.GetByIdTableAsync(order.TableId);
-            Master? master = order.MasterId != 0
-                ? await masterService.GetMasterByIdAsync(order.MasterId)
-                : null;
+            Master? master =
+                order.MasterId != 0 ? await masterService.GetMasterByIdAsync(order.MasterId) : null;
             var hookah = await hookahService.GetByIdHookahAsync(order.HookahId);
 
             var tobaccos = new List<TobaccoShowInfoViewModelDto>();
             foreach (var ot in order.OrderTobaccos)
             {
                 var tobacco = await tobaccoService.GetTobaccoByIdAsync(ot.TobaccoId);
-                tobaccos.Add(new TobaccoShowInfoViewModelDto
-                {
-                    Name = tobacco.Name,
-                    Brand = tobacco.Brand,
-                    Percentage = ot.Percentage
-                });
+                tobaccos.Add(
+                    new TobaccoShowInfoViewModelDto
+                    {
+                        Name = tobacco.Name,
+                        Brand = tobacco.Brand,
+                        Percentage = ot.Percentage,
+                    }
+                );
             }
 
-            result.Add(new AllOrdersViewModelDto
-            {
-                Id = order.Id,
-                Table = table,
-                Master = master,
-                Hookah = hookah,
-                CreatedAt = order.CreatedAt,
-                Tobaccos = tobaccos
-            });
+            result.Add(
+                new AllOrdersViewModelDto
+                {
+                    Id = order.Id,
+                    Table = table,
+                    Master = master,
+                    Hookah = hookah,
+                    CreatedAt = order.CreatedAt,
+                    Tobaccos = tobaccos,
+                }
+            );
         }
 
         return View(result);
@@ -207,12 +213,14 @@ public class OrderController : Controller
         foreach (var ot in order.OrderTobaccos)
         {
             var tobacco = await tobaccoService.GetTobaccoByIdAsync(ot.TobaccoId);
-            tobaccoDetails.Add(new TobaccoShowInfoViewModelDto
-            {
-                Name = tobacco.Name,
-                Brand = tobacco.Brand,
-                Percentage = ot.Percentage
-            });
+            tobaccoDetails.Add(
+                new TobaccoShowInfoViewModelDto
+                {
+                    Name = tobacco.Name,
+                    Brand = tobacco.Brand,
+                    Percentage = ot.Percentage,
+                }
+            );
         }
 
         var orderDetails = new OrderDetailsViewModelDto
@@ -222,10 +230,9 @@ public class OrderController : Controller
             Table = await tableService.GetByIdTableAsync(order.TableId),
             CreatedAt = order.CreatedAt,
             OrderStatus = order.OrderStatus,
-            Master = order.MasterId != 0
-                ? await masterService.GetMasterByIdAsync(order.MasterId)
-                : null,
-            OrderTobaccos = tobaccoDetails
+            Master =
+                order.MasterId != 0 ? await masterService.GetMasterByIdAsync(order.MasterId) : null,
+            OrderTobaccos = tobaccoDetails,
         };
 
         return View(orderDetails);

@@ -1,13 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShishaBuilder.Core.DTOs.HookahDtos;
+using ShishaBuilder.Core.DTOs.TableDtos;
 using ShishaBuilder.Core.Models;
 using ShishaBuilder.Core.Services.TableServices;
-using ShishaBuilder.Core.DTOs.TableDtos;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ShishaBuilder.Web.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin")]
 [Route("[controller]")]
 public class TableController : Controller
 {

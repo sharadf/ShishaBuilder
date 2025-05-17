@@ -30,7 +30,7 @@
                     <strong>Status:</strong>
                     <span class="badge bg-warning text-dark px-3 py-2 fs-6">@Model.OrderStatus</span>
                 </p>
-                <p class="fs-4 mb-2"><strong>Master:</strong> @(Model.Master != null ? $"{Model.Master.FirstName} {Model.Master.LastName}" : "—")</p>
+                <p class="fs-4 mb-2"><strong>Master:</strong> @(Model.Master != null ? $"{Model.Master.AppUser.FullName}" : "—")</p>
                 <p class="fs-5 mt-3"><strong>Created At:</strong> @Model.CreatedAt.ToLocalTime().ToString("g")</p>
             </div>
         </div>

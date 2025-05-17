@@ -1,24 +1,19 @@
-@model ShishaBuilder.Core.Dtos.MasterDtos.CreateMasterViewModel
+@model ShishaBuilder.Core.DTOs.EditMasterViewModel
 
 @{
-    ViewData["Title"] = "Edit Master";
-    var masterId = ViewBag.MasterId;
-    var existingImage = ViewBag.ExistingImage as string;
+    ViewData["Title"] = "Edit master";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="Edit" method="post" enctype="multipart/form-data" asp-route-id="@masterId">
-    <div class="form-group">
-        <label asp-for="FirstName"></label>
-        <input asp-for="FirstName" class="form-control" />
-        <span asp-validation-for="FirstName" class="text-danger"></span>
-    </div>
+<form asp-action="Edit" method="post" enctype="multipart/form-data" asp-route-id="@Model.MasterId">
+    <input type="hidden" asp-for="AppUserId" />
+    <input type="hidden" asp-for="ExistingImageUrl" />
 
     <div class="form-group">
-        <label asp-for="LastName"></label>
-        <input asp-for="LastName" class="form-control" />
-        <span asp-validation-for="LastName" class="text-danger"></span>
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
     </div>
 
     <div class="form-group">
@@ -26,20 +21,42 @@
         <input asp-for="PhoneNumber" class="form-control" />
         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
     </div>
-    
+
     <div class="form-group">
-        <label>Current Photo</label><br />
-        <img src="@existingImage" alt="Master photo"
-            style="width: 200px; height: auto; object-fit: cover; border-radius: 10px;" />
+        <label asp-for="Age"></label>
+        <input asp-for="Age" class="form-control" />
+        <span asp-validation-for="Age" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="ImageFile">New Photo (optional)</label>
+        <label asp-for="ExperienceYears"></label>
+        <input asp-for="ExperienceYears" class="form-control" />
+        <span asp-validation-for="ExperienceYears" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Gender"></label>
+        <select asp-for="Gender" class="form-control">
+            <option value="">-- Select gender --</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Existing image</label><br />
+        <img src="@Model.ExistingImageUrl" alt="Master photo" style="width:150px;height:auto;" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ImageFile">New photo(if you need to change)</label>
         <input asp-for="ImageFile" type="file" class="form-control-file" />
         <span asp-validation-for="ImageFile" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="AllMasters" class="btn btn-secondary">Cancel</a>
 </form>
 
 @section Scripts {

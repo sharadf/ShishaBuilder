@@ -14,53 +14,51 @@ public class MasterService : IMasterService
 
     public MasterService(IMasterRepository masterRepository)
     {
-        this.masterRepository=masterRepository;
+        this.masterRepository = masterRepository;
     }
 
     public async Task AddMasterAsync(Master master)
     {
-        if (master==null)
+        if (master == null)
         {
             throw new ArgumentNullException();
-        } 
-        
+        }
+
         await masterRepository.AddMasterAsync(master);
     }
 
     public async Task<IEnumerable<Master>> GetAllDeletedMastersAsync()
     {
-        var allMasters= await masterRepository.GetAllMastersAsync();
+        var allMasters = await masterRepository.GetAllMastersAsync();
 
-        return  allMasters
-                    .Where(t=>t.IsActive==false);
+        return allMasters.Where(t => t.IsActive == false);
     }
 
     public async Task<IEnumerable<Master>> GetAllMastersAsync()
     {
-        var allMasters= await masterRepository.GetAllMastersAsync();
+        var allMasters = await masterRepository.GetAllMastersAsync();
 
-        return  allMasters
-                    .Where(t=>t.IsActive==true);
+        return allMasters.Where(t => t.IsActive == true);
     }
 
     public async Task<Master> GetMasterByIdAsync(int id)
     {
-        var master=await masterRepository.GetMasterByIdAsync(id);
-        if (master==null)
+        var master = await masterRepository.GetMasterByIdAsync(id);
+        if (master == null)
         {
             throw new KeyNotFoundException($"Master with ID {id} was not found.");
-        }    
+        }
         return master;
     }
 
     public async Task SoftDeleteMasterAsync(int id)
     {
-        var master=await masterRepository.GetMasterByIdAsync(id);
-        if (master==null)
+        var master = await masterRepository.GetMasterByIdAsync(id);
+        if (master == null)
         {
             throw new KeyNotFoundException($"Master with ID {id} was not found.");
         }
-        master.IsActive=false;
+        master.IsActive = false;
         await masterRepository.UpdateMasterAsync(master);
     }
 
