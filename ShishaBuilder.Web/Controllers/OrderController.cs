@@ -62,7 +62,6 @@ public class OrderController : Controller
             .OrderByDescending(t => t.SelectionRate)
             .ThenBy(t => t.Name) // вторичная сортировка по имени (если нужно)
             .ToList();
-
         ViewData["Brands"] = allBrands;
         ViewData["HookahId"] = hookahId;
         ViewData["TableNumber"] = tableNumber;
@@ -158,6 +157,7 @@ public class OrderController : Controller
     [HttpGet("AllOrders")]
     public async Task<IActionResult> AllOrders(int? tableNumber)
     {
+
         var orders = await orderService.GetAllOrdersAsync();
         if (tableNumber.HasValue)
         {
@@ -237,4 +237,5 @@ public class OrderController : Controller
 
         return View(orderDetails);
     }
+
 }
