@@ -2,6 +2,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using ShishaBuilder.Core.Services.BlobServices;
 using ShishaBuilder.Core.Settings;
 
 namespace ShishaBuilder.Business.Services.BlobServices;
@@ -20,7 +21,10 @@ public class BlobService : IBlobService
         if (file == null)
             throw new ArgumentException("File cannot be null");
 
-        var blobContainerClient = new BlobContainerClient(blobSettings.ConnectionString, containerName);
+        var blobContainerClient = new BlobContainerClient(
+            blobSettings.ConnectionString,
+            containerName
+        );
         await blobContainerClient.CreateIfNotExistsAsync();
 
         string fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
@@ -28,7 +32,10 @@ public class BlobService : IBlobService
 
         using (var stream = file.OpenReadStream())
         {
-            await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = file.ContentType });
+            await blobClient.UploadAsync(
+                stream,
+                new BlobHttpHeaders { ContentType = file.ContentType }
+            );
         }
 
         return blobClient.Uri.ToString();
@@ -36,7 +43,10 @@ public class BlobService : IBlobService
 
     public async Task<List<string>> DownloadAllPhotos(string containerName)
     {
-        var blobContainerClient = new BlobContainerClient(blobSettings.ConnectionString, containerName);
+        var blobContainerClient = new BlobContainerClient(
+            blobSettings.ConnectionString,
+            containerName
+        );
         var result = new List<string>();
 
         await foreach (var blob in blobContainerClient.GetBlobsAsync())

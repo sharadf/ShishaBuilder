@@ -21,6 +21,7 @@ using ShishaBuilder.Core.Repositories.MasterRepositories;
 using ShishaBuilder.Core.Repositories.OrderRepositories;
 using ShishaBuilder.Core.Repositories.TableRepositories;
 using ShishaBuilder.Core.Seeding;
+using ShishaBuilder.Core.Services.BlobServices;
 using ShishaBuilder.Core.Services.MasterServices;
 using ShishaBuilder.Core.Services.OrderServices;
 using ShishaBuilder.Core.Services.TableServices;
@@ -60,6 +61,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     options.UseNpgsql(connectionString);
 });
+
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
+
+builder.Services.AddTransient<ISmtpService, SmtpService>();
+
+
 
 builder.Services.AddScoped<IHookahRepository, HookahRepository>();
 builder.Services.AddScoped<IHookahService, HookahService>();

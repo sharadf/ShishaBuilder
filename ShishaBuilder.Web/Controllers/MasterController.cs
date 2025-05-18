@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -39,6 +40,63 @@ public class MasterController : Controller
     public IActionResult MasterPanel()
     {
         return View();
+    }
+
+    [Authorize(Roles = "Master")]
+    [HttpGet("MyInfo")]
+    public async Task<IActionResult> MyInfo()
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null)
+            return Unauthorized();
+
+        var master = await context
+            .Masters.Include(m => m.AppUser)
+            .FirstOrDefaultAsync(m => m.AppUserId == userId && m.IsActive);
+
+        if (master == null)
+            return NotFound("Мастер не найден.");
+
+        var dto = new EditMasterPhotoOnlyDto
+        {
+            MasterId = master.Id,
+            AppUserId = master.AppUserId,
+            FullName = master.AppUser.FullName!,
+            PhoneNumber = master.AppUser.PhoneNumber!,
+            Age = master.AppUser.Age.Value,
+            ExperienceYears = master.AppUser.ExperienceYears.Value,
+            ExistingImageUrl = master.PhotoUrl,
+            Email = master.AppUser.Email!, // ← ВАЖНО
+        };
+
+        return View(dto);
+    }
+
+    [Authorize(Roles = "Master")]
+    [HttpPost("MyInfo")]
+    public async Task<IActionResult> EditPhoto(EditMasterPhotoOnlyDto dto)
+    {
+        if (dto.ImageFile == null || dto.ImageFile.Length == 0)
+        {
+            ModelState.AddModelError("ImageFile", "Пожалуйста, выберите изображение.");
+            return View("MyInfo", dto);
+        }
+
+        var master = await context.Masters.FirstOrDefaultAsync(m =>
+            m.Id == dto.MasterId && m.IsActive
+        );
+
+        if (master == null)
+            return NotFound();
+
+        string imageUrl = await blobService.UploadPhotoAsync(dto.ImageFile, "masters");
+        master.PhotoUrl = imageUrl;
+
+        context.Update(master);
+        await context.SaveChangesAsync();
+
+        TempData["SuccessMessage"] = "Фото успешно обновлено.";
+        return RedirectToAction("MyInfo");
     }
 
     [HttpGet("Create")]

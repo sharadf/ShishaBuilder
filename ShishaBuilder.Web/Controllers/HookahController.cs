@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShishaBuilder.Core.DTOs.HookahDtos;
 using ShishaBuilder.Core.Models;
+using ShishaBuilder.Core.Services.BlobServices;
 
 namespace ShishaBuilder.Web.Controllers
 {

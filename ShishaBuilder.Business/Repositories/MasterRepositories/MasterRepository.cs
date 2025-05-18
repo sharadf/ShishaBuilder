@@ -22,7 +22,11 @@ public class MasterRepository : IMasterRepository
 
     public async Task<IEnumerable<Master>> GetAllMastersAsync()
     {
-        return await context.Masters.ToListAsync();
+        // return await context
+        //     .Masters.Include(m => m.AppUser) // Обязательно!
+        //     .Where(m => m.IsActive)
+        //     .ToListAsync();
+        return await context.Masters.Include(m => m.AppUser).ToListAsync();
     }
 
     public async Task<Master?> GetMasterByIdAsync(int id)
