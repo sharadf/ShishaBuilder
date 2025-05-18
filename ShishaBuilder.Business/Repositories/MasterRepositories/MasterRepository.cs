@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ShishaBuilder.Core.DB;
+using ShishaBuilder.Core.Enums;
 using ShishaBuilder.Core.Models;
 using ShishaBuilder.Core.Repositories.MasterRepositories;
 
@@ -20,6 +21,13 @@ public class MasterRepository : IMasterRepository
         await context.SaveChangesAsync();
     }
 
+    public Task<Master?> FindByAppUserId(string appUserId)
+    {
+        return  context.Masters
+        .Include(m => m.AppUser)
+        .FirstOrDefaultAsync(m => m.AppUserId == appUserId && m.IsActive); 
+    }
+
     public async Task<IEnumerable<Master>> GetAllMastersAsync()
     {
         // return await context
@@ -31,7 +39,9 @@ public class MasterRepository : IMasterRepository
 
     public async Task<Master?> GetMasterByIdAsync(int id)
     {
-        return await context.Masters.FirstOrDefaultAsync(m => m.Id == id);
+        return await context.Masters
+        .Include(m=>m.AppUser)
+        .FirstOrDefaultAsync(m => m.Id == id);
     }
 
     public async Task UpdateMasterAsync(Master master)
@@ -39,4 +49,6 @@ public class MasterRepository : IMasterRepository
         context.Masters.Update(master);
         await context.SaveChangesAsync();
     }
+   
+
 }

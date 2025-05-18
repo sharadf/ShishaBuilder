@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ShishaBuilder.Core.DB;
+using ShishaBuilder.Core.Enums;
 using ShishaBuilder.Core.Models;
 using ShishaBuilder.Core.Repositories.OrderRepositories;
 
@@ -130,4 +131,12 @@ public class OrderRepository : IOrderRepository
             }
         }
     }
+    public async Task<List<Order>> GetOrdersByMasterIdAsync(int masterId)
+    {
+        return await context.Orders
+            .Include(o => o.OrderTobaccos)
+            .Where(o => o.MasterId == masterId && o.OrderStatus == OrderStatus.InProgress)
+            .ToListAsync();
+    }
+
 }

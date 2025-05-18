@@ -1,0 +1,2 @@
+dotnet ef migrations add DockerMigration --context ShishaBuilder.Core.DB.AppDbContext --project ShishaBuilder.Core  --startup-project ShishaBuilder.Web
+dotnet ef database update --context ShishaBuilder.Core.DB.AppDbContext --project ShishaBuilder.Core  --startup-project ShishaBuilder.Web

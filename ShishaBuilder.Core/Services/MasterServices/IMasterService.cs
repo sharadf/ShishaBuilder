@@ -13,5 +13,7 @@ public interface IMasterService
     Task UpdateMasterAsync(Master master);
     Task<IEnumerable<Master>> GetAllMastersAsync();
     Task SoftDeleteMasterAsync(int id);
-    Task<IEnumerable<Master>> GetAllDeletedMastersAsync();
+    Task<IEnumerable<Master>> GetAllDeletedMastersAsync();   
+    Task<Master?> GetMasterByAppUserIdAsync(string appUserId);
+
 }

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ShishaBuilder.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class LocalMigrations : Migration
+    public partial class DockerMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

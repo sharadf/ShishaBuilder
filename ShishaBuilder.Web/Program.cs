@@ -28,6 +28,7 @@ using ShishaBuilder.Core.Services.TableServices;
 using ShishaBuilder.Core.Services.TobaccoServices;
 using ShishaBuilder.Core.Settings;
 using ShishaBuilder.Core.Validation.HookahValidations;
+using ShishaBuilder.Web.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -98,6 +99,8 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -108,7 +111,7 @@ using (var scope = app.Services.CreateScope())
 
 app.UseStaticFiles();
 app.UseRouting();
-
+app.MapHub<OrderHub>("/orderhub");
 app.UseAuthentication();
 app.UseAuthorization();
 
