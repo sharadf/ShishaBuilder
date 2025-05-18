@@ -8,6 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 using ShishaBuilder.Core.DTOs.LoginDtos;
 using ShishaBuilder.Core.Models;
 using ShishaBuilder.Core.Services;
+using ShishaBuilder.Core.Services.BlobServices;
 using ShishaBuilder.Core.Services.MasterServices;
 
 public class AccountController : Controller
@@ -17,6 +18,9 @@ public class AccountController : Controller
     private readonly UserManager<AppUser> userManager;
     private IMasterService masterService;
     private IBlobService blobService;
+
+    private ISmtpService smtpService;
+
     private string containerName = "masters";
 
     public AccountController(
@@ -24,7 +28,8 @@ public class AccountController : Controller
         SignInManager<AppUser> signInManager,
         UserManager<AppUser> userManager,
         IMasterService masterService,
-        IBlobService blobService
+        IBlobService blobService,
+        ISmtpService smtpService
     )
     {
         // _accountService = accountService;
@@ -32,6 +37,7 @@ public class AccountController : Controller
         this.userManager = userManager;
         this.masterService = masterService;
         this.blobService = blobService;
+        this.smtpService = smtpService;
     }
 
     [HttpGet("RegisterAdmin")]
@@ -139,16 +145,21 @@ public class AccountController : Controller
                 IsActive = true,
             };
 
+            // Отправка email с логином и паролем (используем newUser.Password)
+            await smtpService.SendEmailAsync(
+                to: newUser.Login,
+                subject: "Добро пожаловать!",
+                body: $"Здравствуйте, {newUser.FullName}! Ваш логин: {newUser.Login}, пароль: {newUser.Password}"
+            );
+
             await masterService.AddMasterAsync(master);
             TempData["SuccessMessage"] = "Master added successfully!";
-            return RedirectToAction("AllMastersSimple", "Master");
+            return base.RedirectToAction(actionName: "AllMasters", controllerName: "Master");
         }
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
-
-        return base.RedirectToAction(actionName: "Index", controllerName: "Home");
     }
 
     [HttpGet("Login")]

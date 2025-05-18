@@ -36,3 +36,6 @@ JOIN sys.schemas sch ON t.schema_id = sch.schema_id
 WHERE is_ms_shipped = 0; -- исключить системные таблицы
 
 EXEC sp_executesql @sql;
+
+command for clearing *all* bin/obj
+git rm -r --cached .

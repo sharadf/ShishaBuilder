@@ -3,6 +3,10 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
 @using Microsoft.AspNetCore.Mvc.ViewFeatures
 
+@{
+    var media = ViewData["media"];
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -304,7 +308,6 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
 
 
 @* 
