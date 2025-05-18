@@ -1,0 +1,78 @@
+@model IEnumerable<ShishaBuilder.Core.DTOs.OrderDtos.AllOrdersViewModelDto>
+
+@{
+    ViewData["Title"] = "Incoming Orders";
+}
+
+<div class="container py-4">
+    <h2 class="text-center mb-4">📥 Incoming Orders</h2>
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted text-center">No new orders.</p>
+    }
+    else
+    {
+        foreach (var order in Model)
+        {
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <strong>🪑 Table: @order.Table.TableNumber</strong>
+                    <span class="text-muted small">@order.CreatedAt.ToString("g")</span>
+                </div>
+                <div class="card-body">
+                    <p><strong>Hookah:</strong> @order.Hookah.ModelName</p>
+                    <p><strong>Tobacco Mix:</strong></p>
+                    <ul>
+                        @foreach (var tobacco in order.Tobaccos)
+                        {
+                            <li>
+                                @tobacco.Brand — @tobacco.Name (@tobacco.Percentage%)
+                            </li>
+                        }
+                    </ul>
+
+                    <form asp-action="TakeOrder" asp-controller="Master" method="post">
+                        <input type="hidden" name="orderId" value="@order.Id" />
+                        <button type="submit" class="btn btn-success">Take Order</button>
+                    </form>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/orderHub")
+            .build();
+
+        connection.on("ReceiveNewOrder", function (order) {
+            // Insert order card into the HTML
+            const container = document.createElement("div");
+            container.className = "card mb-3 shadow-sm";
+            container.innerHTML = `
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <strong>🪑 Table: ${order.table.tableNumber}</strong>
+                    <span class="text-muted small">${new Date(order.createdAt).toLocaleString()}</span>
+                </div>
+                <div class="card-body">
+                    <p><strong>Hookah:</strong> ${order.hookah.name}</p>
+                    <p><strong>Tobacco Mix:</strong></p>
+                    <ul>
+                        ${order.tobaccos.map(t => `<li>${t.brand} — ${t.name} (${t.percentage}%)</li>`).join("")}
+                    </ul>
+                    <form method="post" action="/Order/TakeOrder">
+                        <input type="hidden" name="orderId" value="${order.id}" />
+                        <button type="submit" class="btn btn-success">Take Order</button>
+                    </form>
+                </div>
+            `;
+            document.querySelector(".container").appendChild(container);
+        });
+
+        connection.start().catch(err => console.error(err.toString()));
+    </script>
+}

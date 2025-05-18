@@ -12,8 +12,8 @@ using ShishaBuilder.Core.DB;
 namespace ShishaBuilder.Core.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250517122142_LocalMigrations")]
-    partial class LocalMigrations
+    [Migration("20250517193256_DockerMigration")]
+    partial class DockerMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -66,4 +66,9 @@ public class MasterService : IMasterService
     {
         await masterRepository.UpdateMasterAsync(master);
     }
+    public async Task<Master?> GetMasterByAppUserIdAsync(string appUserId)
+    {
+        return await masterRepository.FindByAppUserId(appUserId);
+    }
+
 }

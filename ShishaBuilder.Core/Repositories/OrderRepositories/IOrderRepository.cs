@@ -15,5 +15,5 @@ public interface IOrderRepository
     Task<int> GetTotalOrdersCountAsync();
     Task<Dictionary<int, int>> GetTobaccoUsageStatsAsync();
 
-
+    Task<List<Order>> GetOrdersByMasterIdAsync(int masterId);
 }
