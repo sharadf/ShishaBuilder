@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using ShishaBuilder.Core.DTOs.OrderDtos;
 using ShishaBuilder.Core.DTOs.TobaccoDtos;
 using ShishaBuilder.Core.Enums;
@@ -8,6 +9,7 @@ using ShishaBuilder.Core.Services.MasterServices;
 using ShishaBuilder.Core.Services.OrderServices;
 using ShishaBuilder.Core.Services.TableServices;
 using ShishaBuilder.Core.Services.TobaccoServices;
+using ShishaBuilder.Web.Hubs;
 
 namespace ShishaBuilder.Web.Controllers;
 
@@ -19,13 +21,15 @@ public class OrderController : Controller
     private readonly ITableService tableService;
     private readonly IOrderService orderService;
     private readonly IMasterService masterService;
+    private readonly IHubContext<OrderHub> hubContext;
 
     public OrderController(
         IHookahService hookahService,
         ITobaccoService tobaccoService,
         ITableService tableService,
         IOrderService orderService,
-        IMasterService masterService
+        IMasterService masterService,
+        IHubContext<OrderHub> hubContext
     )
     {
         this.hookahService = hookahService;
@@ -33,6 +37,7 @@ public class OrderController : Controller
         this.tableService = tableService;
         this.orderService = orderService;
         this.masterService = masterService;
+        this.hubContext = hubContext;
     }
 
     [HttpGet("SelectHookah")]
@@ -139,6 +144,9 @@ public class OrderController : Controller
         try
         {
             await orderService.AddOrderAsync(order);
+            var viewModel = await orderService.GetOrdersViewModelAsync(order.Id);
+            await hubContext.Clients.All.SendAsync("ReceiveNewOrder", viewModel);
+
             return RedirectToAction("OrderSuccess", new { orderId = order.Id });
         }
         catch (Exception ex)
@@ -195,12 +203,12 @@ public class OrderController : Controller
                     Table = table,
                     Master = master,
                     Hookah = hookah,
+                    OrderStatus=order.OrderStatus,
                     CreatedAt = order.CreatedAt,
                     Tobaccos = tobaccos,
                 }
             );
         }
-
         return View(result);
     }
 

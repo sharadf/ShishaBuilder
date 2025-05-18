@@ -1,0 +1,48 @@
+@model IEnumerable<ShishaBuilder.Core.DTOs.OrderDtos.AllOrdersViewModelDto>
+
+@{
+    ViewData["Title"] = "Current Orders";
+}
+
+<div class="container py-4">
+    <h2 class="text-center mb-4">🧾 Current Orders</h2>
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted text-center">You have no active orders.</p>
+    }
+    else
+    {
+        foreach (var order in Model)
+        {
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <strong>🪑 Table: @order.Table.TableNumber</strong>
+                    <span class="text-muted small">@order.CreatedAt.ToString("g")</span>
+                </div>
+                <div class="card-body">
+                    <p><strong>Hookah:</strong> @order.Hookah.ModelName</p>
+                    <p><strong>Tobacco Mix:</strong></p>
+                    <ul>
+                        @foreach (var tobacco in order.Tobaccos)
+                        {
+                            <li>
+                                @tobacco.Brand — @tobacco.Name (@tobacco.Percentage%)
+                            </li>
+                        }
+                    </ul>
+
+                    <form asp-action="CompleteOrder" asp-controller="Master" method="post" class="d-inline">
+                        <input type="hidden" name="orderId" value="@order.Id" />
+                        <button type="submit" class="btn btn-primary">Complete</button>
+                    </form>
+
+                    <form asp-action="CancelOrder" asp-controller="Master" method="post" class="d-inline ms-2">
+                        <input type="hidden" name="orderId" value="@order.Id" />
+                        <button type="submit" class="btn btn-danger">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        }
+    }
+</div>
