@@ -15,156 +15,182 @@
     <title>@ViewData["Title"] - ShishaBuilder</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ShishaBuilder.Web.styles.css" asp-append-version="true" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4cc9f0;
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
             --light: #f8f9fa;
-            --dark: #212529;
-            --success: #4ade80;
-            --danger: #f72585;
-            --warning: #f8961e;
-            --transition: all 0.3s ease-in-out;
+            --dark: #0f0f1b;
+            --text: #333;
+            --text-light: #777;
+            --transition: all 0.3s ease;
+            --sidebar-width: 280px;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f5f7fa;
-            color: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            color: white;
+            position: fixed;
+            height: 100vh;
+            padding: 2rem 1.5rem;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: var(--transition);
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
+            letter-spacing: 1px;
+            margin-left: 0.5rem;
+        }
+
+        .sidebar-brand span {
+            color: var(--highlight);
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-link i {
+            margin-right: 1rem;
+            width: 24px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .nav-link.active {
+            background: var(--highlight);
+            color: white;
+            font-weight: 500;
+        }
+
+        .nav-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1.5rem 0;
+        }
+
+        .nav-title {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 1.5rem 0 0.5rem 1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* Navbar */
-        .navbar {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            box-shadow: 0 4px 20px rgba(67, 97, 238, 0.15);
+        .topbar {
+            background: white;
             padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.8rem;
-            color: white !important;
-            letter-spacing: 1px;
+        .user-menu {
+            display: flex;
+            align-items: center;
         }
 
-        .navbar-brand span {
-            color: var(--accent);
-        }
-
-        .nav-link {
-            color: rgba(255, 255, 255, 0.85) !important;
-            font-weight: 500;
-            margin: 0 0.5rem;
-            padding: 0.5rem 1rem !important;
-            border-radius: 50px;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .nav-link:hover {
-            color: white !important;
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 2px;
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 1rem;
+            cursor: pointer;
             transition: var(--transition);
-            transform: translateX(-50%);
         }
 
-        .nav-link:hover::after {
-            width: 70%;
+        .user-avatar:hover {
+            transform: scale(1.1);
         }
 
-        .navbar-toggler {
-            border: none;
-            color: white !important;
-        }
-
-        .navbar-toggler:focus {
-            box-shadow: none;
-        }
-
-        /* Main Content */
-        .container {
+        .content-container {
+            padding: 2rem;
             flex: 1;
-            padding-top: 2rem;
-            padding-bottom: 4rem;
         }
 
-        main {
-            animation: fadeIn 0.5s ease-out;
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
         }
 
-        @@keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Footer */
-        footer {
-            background: linear-gradient(135deg, var(--dark), #343a40);
-            color: white !important;
-            padding: 2rem 0;
-            margin-top: auto;
-        }
-
-        footer a {
-            color: var(--accent) !important;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        footer a:hover {
-            color: white !important;
-            text-decoration: underline;
-        }
-
-        /* Buttons */
-        .btn {
-            border-radius: 50px;
-            padding: 0.5rem 1.5rem;
-            font-weight: 500;
-            transition: var(--transition);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border: none;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--secondary);
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 0;
         }
 
         /* Cards */
@@ -172,143 +198,381 @@
             border: none;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             transition: var(--transition);
             margin-bottom: 1.5rem;
+            background: white;
         }
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1.25rem 1.5rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+            border: none;
+            box-shadow: none;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-primary {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .btn-danger {
+            background-color: var(--highlight);
+        }
+
+        .btn-danger:hover {
+            background-color: #d13856;
+        }
+
+        /* Tables */
+        .table {
+            color: var(--text);
+        }
+
+        .table th {
+            border-top: none;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Forms */
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e0e0e0;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(15, 52, 96, 0.25);
+        }
+
+        /* Badges */
+        .badge {
+            padding: 0.5rem 0.75rem;
+            font-weight: 500;
+            border-radius: 50px;
         }
 
         /* Responsive */
-        @@media (max-width: 768px) {
-            .navbar-brand {
-                font-size: 1.5rem;
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 1000;
             }
 
-            .nav-link {
-                margin: 0.25rem 0;
-                padding: 0.5rem 1rem;
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: block !important;
             }
         }
 
-        /* Special Effects */
-        .bg-blur {
-            backdrop-filter: blur(10px);
-            background-color: rgba(255, 255, 255, 0.85) !important;
-        }        
+        /* Menu Toggle (mobile) */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
 
+        /* Admin specific styles */
+        .admin-nav {
+            border-left: 3px solid var(--highlight);
+        }
+
+        .master-nav {
+            border-left: 3px solid #4cc9f0;
+        }
+
+        /* Footer */
+        .footer {
+            background: white;
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        /* Animations */
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Utility classes */
+        .text-highlight {
+            color: var(--highlight);
+        }
+
+        .bg-highlight {
+            background-color: var(--highlight);
+        }
+
+        .rounded-lg {
+            border-radius: 12px;
+        }
+
+        .shadow-sm {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
     </style>
-
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">ShishaBuilder</a>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-fire text-highlight" style="font-size: 1.8rem;"></i>
+            <span class="sidebar-brand">Shisha<span>Builder</span></span>
+        </div>
 
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Hookah" asp-action="AllHookahs">All Hookahs</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Hookah" asp-action="Create">Create Hookah</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Tobacco" asp-action="AllTobaccos">All Tobaccos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Tobacco" asp-action="Create">Create Tobacco</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Master" asp-action="AllMasters">All Masters</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Account" asp-action="RegisterMaster">Create Master</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-success" asp-controller="Master" asp-action="AllMastersSimple">Simple Master List</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Table" asp-action="AllTables">All Tables</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Table" asp-action="Create">Create Table</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Order" asp-action="SelectHookah">Make Order</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Order" asp-action="AllOrders">All Orders</a>
-                            </li>
-                        }
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
 
-                        @if (User.IsInRole("Master"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-info" asp-controller="Master" asp-action="MasterPanel">Master Panel</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-info" asp-controller="Master" asp-action="IncomingOrders">Incoming Orders</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-info" asp-controller="Master" asp-action="CurrentOrders">Incoming Orders</a>
-                            </li>
-                            
-                        }
+      @if (User.IsInRole("Admin"))
+{
+    <li class="nav-item">
+        <div class="nav-title">Management</div>
+    </li>
+    
+    <!-- Hookahs with dropdown -->
+    <li class="nav-item admin-nav dropdown">
+        <div class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fas fa-fire-alt"></i>
+            <span>Hookahs</span>
+        </div>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" asp-controller="Hookah" asp-action="AllHookahs">View All</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" asp-controller="Hookah" asp-action="Create">Add New</a></li>
+        </ul>
+    </li>
 
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <li class="nav-item">
-                                <a asp-area="" asp-controller="Account" asp-action="Logout" type="submit" class="nav-link btn btn-link text-light" style="padding: 0; border: none; background: none;">Logout</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Account" asp-action="Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Account" asp-action="RegisterAdmin">Sign Up</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <!-- Tobaccos with dropdown -->
+    <li class="nav-item admin-nav dropdown">
+        <div class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fas fa-leaf"></i>
+            <span>Tobaccos</span>
+        </div>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" asp-controller="Tobacco" asp-action="AllTobaccos">View All</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" asp-controller="Tobacco" asp-action="Create">Add New</a></li>
+        </ul>
+    </li>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <!-- Masters with dropdown -->
+    <li class="nav-item admin-nav dropdown">
+        <div class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fas fa-users"></i>
+            <span>Masters</span>
+        </div>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" asp-controller="Master" asp-action="AllMasters">View All</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" asp-controller="Account" asp-action="RegisterMaster">Add New</a></li>
+        </ul>
+    </li>
+
+    <!-- Tables with dropdown -->
+    <li class="nav-item admin-nav dropdown">
+        <div class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fas fa-chair"></i>
+            <span>Tables</span>
+        </div>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" asp-controller="Table" asp-action="AllTables">View All</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" asp-controller="Table" asp-action="Create">Add New</a></li>
+        </ul>
+    </li>
+}
+
+            @if (User.IsInRole("Master"))
+            {
+                <li class="nav-item">
+                    <div class="nav-title">Master Panel</div>
+                </li>
+                <li class="nav-item master-nav">
+                    <a class="nav-link" asp-controller="Master" asp-action="MyInfo">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>My Info</span>
+                    </a>
+                </li>
+                <li class="nav-item master-nav">
+                    <a class="nav-link" asp-controller="Master" asp-action="IncomingOrders">
+                        <i class="fas fa-inbox"></i>
+                        <span>Incoming Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item master-nav">
+                    <a class="nav-link" asp-controller="Master" asp-action="CurrentOrders">
+                        <i class="fas fa-tasks"></i>
+                        <span>Current Orders</span>
+                    </a>
+                </li>
+            }
+
+            <li class="nav-item">
+                <div class="nav-divider"></div>
+            </li>
+
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Account" asp-action="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Account" asp-action="Login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Login</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Account" asp-action="RegisterAdmin">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Register</span>
+                    </a>
+                </li>
+            }
+        </ul>
     </div>
 
-    <footer class="border-top footer text-muted mt-auto">
-        <div class="container">
-            &copy; 2025 - ShishaBuilder
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Topbar -->
+        <div class="topbar">
+            <button class="menu-toggle d-lg-none">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <div class="user-menu">
+                    <span class="text-muted">Welcome, @User.Identity.Name</span>
+                    <div class="user-avatar">
+                        @User.Identity.Name.Substring(0, 1).ToUpper()
+                    </div>
+                </div>
+            }
         </div>
-    </footer>
+
+        <!-- Page Content -->
+        <div class="content-container fade-in">
+            @RenderBody()
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            &copy; @DateTime.Now.Year - ShishaBuilder. All rights reserved.
+        </footer>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <script>
+        // Toggle sidebar on mobile
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.querySelector('.sidebar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (window.innerWidth < 992 && 
+                !sidebar.contains(event.target) && 
+                event.target !== menuToggle && 
+                !menuToggle.contains(event.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Highlight active nav link based on current URL
+        $(document).ready(function() {
+            const currentUrl = window.location.pathname;
+            
+            $('.nav-link').each(function() {
+                const linkUrl = $(this).attr('href');
+                
+                if (currentUrl === linkUrl) {
+                    $(this).addClass('active');
+                }
+            });
+        });
+    </script>
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
 
 @* 
 <!DOCTYPE html>
