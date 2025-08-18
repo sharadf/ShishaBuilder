@@ -7,11 +7,13 @@ using ShishaBuilder.Business.Repositories;
 using ShishaBuilder.Business.Repositories.HookahRepositories;
 using ShishaBuilder.Business.Repositories.MasterRepositories;
 using ShishaBuilder.Business.Repositories.OrderRepositories;
+using ShishaBuilder.Business.Repositories.StatisticRepositories;
 using ShishaBuilder.Business.Repositories.TableRepositories;
 using ShishaBuilder.Business.Services.BlobServices;
 using ShishaBuilder.Business.Services.HookahServices;
 using ShishaBuilder.Business.Services.MasterServices;
 using ShishaBuilder.Business.Services.OrderServices;
+using ShishaBuilder.Business.Services.StatisticServices;
 using ShishaBuilder.Business.Services.TobaccoServices;
 using ShishaBuilder.Core.DB;
 using ShishaBuilder.Core.Models;
@@ -19,11 +21,13 @@ using ShishaBuilder.Core.Repositories;
 using ShishaBuilder.Core.Repositories.HookahRepositories;
 using ShishaBuilder.Core.Repositories.MasterRepositories;
 using ShishaBuilder.Core.Repositories.OrderRepositories;
+using ShishaBuilder.Core.Repositories.StatisticRepository;
 using ShishaBuilder.Core.Repositories.TableRepositories;
 using ShishaBuilder.Core.Seeding;
 using ShishaBuilder.Core.Services.BlobServices;
 using ShishaBuilder.Core.Services.MasterServices;
 using ShishaBuilder.Core.Services.OrderServices;
+using ShishaBuilder.Core.Services.StatisticServices;
 using ShishaBuilder.Core.Services.TableServices;
 using ShishaBuilder.Core.Services.TobaccoServices;
 using ShishaBuilder.Core.Settings;
@@ -68,6 +72,8 @@ builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpS
 builder.Services.AddTransient<ISmtpService, SmtpService>();
 
 
+builder.Services.AddScoped<IStatisticRepository, StatisticRepository>();
+builder.Services.AddScoped<IStatisticService, StatisticService>();
 
 builder.Services.AddScoped<IHookahRepository, HookahRepository>();
 builder.Services.AddScoped<IHookahService, HookahService>();
@@ -78,7 +84,7 @@ builder.Services.AddScoped<ITableService, TableService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
-builder.Services.Configure<BlobSettings>(builder.Configuration.GetSection("AzureBlobStorage"));
+builder.Services.Configure<BlobSettings>(builder.Configuration.GetSection("GoogleCloudStorage"));
 builder.Services.AddScoped<IBlobService, BlobService>();
 
 builder.Services.AddScoped<ITobaccoRepository, TobaccoRepository>();
@@ -118,3 +124,8 @@ app.UseAuthorization();
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+
+
+//ToDo Eshe raz vse proverit i sdelat push
+

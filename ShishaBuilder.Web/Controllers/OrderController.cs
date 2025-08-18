@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 using ShishaBuilder.Core.DTOs.OrderDtos;
 using ShishaBuilder.Core.DTOs.TobaccoDtos;
 using ShishaBuilder.Core.Enums;
+using ShishaBuilder.Core.Helpers;
 using ShishaBuilder.Core.Models;
 using ShishaBuilder.Core.Services.MasterServices;
 using ShishaBuilder.Core.Services.OrderServices;
@@ -203,7 +204,7 @@ public class OrderController : Controller
                     Table = table,
                     Master = master,
                     Hookah = hookah,
-                    OrderStatus=order.OrderStatus,
+                    OrderStatus = order.OrderStatus,
                     CreatedAt = order.CreatedAt,
                     Tobaccos = tobaccos,
                 }
@@ -244,6 +245,17 @@ public class OrderController : Controller
         };
 
         return View(orderDetails);
+    }
+
+    [HttpGet("OrdersByMaster/{masterId}")]
+    public async Task<IActionResult> OrdersByMaster([FromRoute] int masterId)
+    {
+
+        var orders = await orderService.GetAllOrdersByMasterAsync(masterId);
+        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            return PartialView("_OrdersByMasterTable", orders);
+
+        return View("OrdersByMaster", orders);
     }
 
 }

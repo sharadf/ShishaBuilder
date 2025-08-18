@@ -1,19 +1,19 @@
 @model ShishaBuilder.Core.DTOs.OrderDtos.OrderPreviewViewModelDto
 
-@if (Model == null || Model.Hookah == null)
+ @if (Model == null || Model.Hookah == null)
 {
     <div class="alert alert-danger" role="alert">
         Order data is not available. Please try again.
     </div>
     return;
-}
+} 
 
 <div class="container mt-4">
     <div class="card mb-4 shadow-sm">
         <div class="row g-0">
             <!-- Hookah Image -->
             <div class="col-md-4">
-                @if (!string.IsNullOrEmpty(Model.Hookah.Image))
+                 @if (!string.IsNullOrEmpty(Model.Hookah.Image))
                 {
                     <img src="@Model.Hookah.Image" 
                          class="img-fluid rounded-start h-100" 
@@ -25,7 +25,9 @@
                     <div class="d-flex align-items-center justify-content-center bg-light h-100">
                         <span class="text-muted">No image available</span>
                     </div>
-                }
+
+                    
+                } 
             </div>
 
             <!-- Order Details -->

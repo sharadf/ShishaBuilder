@@ -1,0 +1,190 @@
+@model List<ShishaBuilder.Core.DTOs.StatisticDtos.MasterStatisticDto>
+
+@{
+  ViewData["Title"] = "Masters statistics";
+
+  DateTime? start = ViewBag.StartDate != null ? (DateTime)ViewBag.StartDate : (DateTime?)null;
+  DateTime? end   = ViewBag.EndDate   != null ? (DateTime)ViewBag.EndDate   : (DateTime?)null;
+
+  var totalOrders = Model?.Sum(x => x.TotalOrders) ?? 0;
+
+  var daySpan = (start.HasValue && end.HasValue)
+    ? (end.Value.Date - start.Value.Date).Days + 1
+    : 0;
+  if (daySpan < 0) daySpan = 0;
+
+  var avgPerDay = daySpan > 0 ? (double)totalOrders / daySpan : 0;
+}
+
+<h2 class="mb-4">Masters statistics</h2>
+
+<form method="get" class="mb-3 d-flex flex-wrap gap-3 align-items-end" id="filterForm">
+  <div>
+    <label for="startDate" class="form-label">From:</label>
+    <input type="date" name="startDate" id="startDate"
+           value="@(start.HasValue ? start.Value.ToString("yyyy-MM-dd") : "")"
+           class="form-control" />
+  </div>
+  <div>
+    <label for="endDate" class="form-label">To:</label>
+    <input type="date" name="endDate" id="endDate"
+           value="@(end.HasValue ? end.Value.ToString("yyyy-MM-dd") : "")"
+           class="form-control" />
+  </div>
+  <div class="d-flex gap-2 align-items-end">
+    <button type="submit" class="btn btn-primary" id="showBtn">Show</button>
+    <div class="btn-group flex-wrap" role="group" aria-label="Quick ranges">
+      <button type="button" class="btn btn-outline-secondary quick-range" data-range="today">Today</button>
+      <button type="button" class="btn btn-outline-secondary quick-range" data-range="yesterday">Yesterday</button>
+      <button type="button" class="btn btn-outline-secondary quick-range" data-range="7days">7 days</button>
+      <button type="button" class="btn btn-outline-secondary quick-range" data-range="month">Month</button>
+      <button type="button" class="btn btn-outline-secondary" id="clearBtn">Clear</button>
+    </div>
+  </div>
+</form>
+
+<div class="mb-3 p-3 rounded-3 bg-light border border-primary d-inline-flex gap-2 align-items-center">
+  <span class="badge bg-primary me-2">Total orders: @totalOrders</span>
+  <span class="badge bg-secondary">
+    Avg/day: @(daySpan > 0 ? avgPerDay.ToString("0.##") : "—")
+  </span>
+</div>
+
+@if (Model != null && Model.Any())
+{
+  <div class="row">
+    @foreach (var master in Model)
+    {
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow">
+          <img src="@master.PhotoUrl" class="card-img-top" alt="Master photo" style="object-fit: cover; height: 200px;" />
+          <div class="card-body text-center">
+            <h5 class="card-title">@master.MasterName</h5>
+
+            <div class="d-flex justify-content-center gap-2 mb-2">
+              <span class="badge bg-primary">Orders: @master.TotalOrders</span>
+              <span class="badge bg-info text-dark">
+                Avg/day: @(daySpan > 0 ? (master.TotalOrders / (double)daySpan).ToString("0.##") : "—")
+              </span>
+            </div>
+
+            <button type="button"
+                    class="btn btn-outline-primary btn-sm view-orders"
+                    data-master-id="@master.MasterId"
+                    data-master-name="@master.MasterName">
+              Orders
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}
+else
+{
+  <div class="alert alert-info">No orders for the selected period.</div>
+}
+
+
+<div class="modal fade" id="ordersModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ordersModalTitle">Orders</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="ordersModalBody">
+        <div class="text-center py-5">Loading…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // --- quick ranges ---
+  const form  = document.getElementById('filterForm');
+  const start = document.getElementById('startDate');
+  const end   = document.getElementById('endDate');
+  const show  = document.getElementById('showBtn');
+  const clear = document.getElementById('clearBtn');
+
+  const fmt = (d) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const k = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${k}`;
+  };
+
+  const submitSafely = () => {
+    if (form.dataset.busy === '1') return;
+    form.dataset.busy = '1';
+    if (show) show.disabled = true;
+    form.submit();
+  };
+
+  document.querySelectorAll('.quick-range').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const today = new Date();
+      let s, e;
+      switch (btn.dataset.range) {
+        case 'today':
+          s = e = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+          break;
+        case 'yesterday':
+          s = e = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+          break;
+        case '7days':
+          e = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+          s = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6);
+          break;
+        case 'month':
+          e = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+          s = new Date(today.getFullYear(), today.getMonth(), 1);
+          break;
+      }
+      start.value = fmt(s);
+      end.value   = fmt(e);
+      submitSafely();
+    });
+  });
+
+  if (clear) {
+    clear.addEventListener('click', () => {
+      start.value = '';
+      end.value   = '';
+      submitSafely();
+    });
+  }
+
+  // --- modal loader ---
+  const modalEl   = document.getElementById('ordersModal');
+  const modalBody = document.getElementById('ordersModalBody');
+  const modalTitle= document.getElementById('ordersModalTitle');
+  const bsModal   = new bootstrap.Modal(modalEl);
+
+  document.querySelectorAll('.view-orders').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const masterId   = btn.dataset.masterId;
+      const masterName = btn.dataset.masterName || '';
+      const params = new URLSearchParams();
+      if (start?.value) params.set('startDate', start.value);
+      if (end?.value)   params.set('endDate',   end.value);
+
+      // Если у тебя контроллер называется OrdersController — замени /Order/ на /Orders/
+      const url = `/Order/OrdersByMaster/${masterId}` + (params.toString() ? `?${params}` : '');
+
+      modalTitle.textContent = `Orders — ${masterName}`;
+      modalBody.innerHTML = '<div class="text-center py-5">Loading…</div>';
+      bsModal.show();
+
+      try {
+        const html = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } }).then(r => r.text());
+        modalBody.innerHTML = html;
+      } catch (e) {
+        modalBody.innerHTML = '<div class="alert alert-danger mb-0">Failed to load orders.</div>';
+      }
+    });
+  });
+});
+</script>
