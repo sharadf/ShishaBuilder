@@ -1,13 +1,8 @@
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 using ShishaBuilder.Core.DTOs.LoginDtos;
 using ShishaBuilder.Core.Models;
-using ShishaBuilder.Core.Services;
 using ShishaBuilder.Core.Services.BlobServices;
 using ShishaBuilder.Core.Services.MasterServices;
 
@@ -134,7 +129,7 @@ public class AccountController : Controller
             else
             {
                 imageUrl =
-                    "https://jamal771.blob.core.windows.net/masters/master%20default%20photo.jpg";
+                    "https://storage.googleapis.com/hishabuilder-blob/masters/26996d6e-625c-4bdb-8b91-e3ed32709d57.jpg";
             }
 
             // Создание Master
