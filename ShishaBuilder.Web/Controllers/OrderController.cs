@@ -13,7 +13,7 @@ using ShishaBuilder.Core.Services.TobaccoServices;
 using ShishaBuilder.Web.Hubs;
 
 namespace ShishaBuilder.Web.Controllers;
-
+[Authorize(Roles="Admin")]
 [Route("[controller]")]
 public class OrderController : Controller
 {

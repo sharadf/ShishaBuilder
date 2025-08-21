@@ -16,6 +16,7 @@ using ShishaBuilder.Core.Services.TobaccoServices;
 
 namespace ShishaBuilder.Web.Controllers;
 
+[Authorize(Roles="Admin")]
 
 [Route("[controller]")]
 public class TobaccoController : Controller
