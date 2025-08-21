@@ -131,12 +131,20 @@ public class OrderRepository : IOrderRepository
             }
         }
     }
-    public async Task<List<Order>> GetOrdersByMasterIdAsync(int masterId)
+    public async Task<List<Order>> GetOrdersByMasterIdAsync(int masterId) //GET InProgress Orders
     {
         return await context.Orders
             .Include(o => o.OrderTobaccos)
             .Where(o => o.MasterId == masterId && o.OrderStatus == OrderStatus.InProgress)
             .ToListAsync();
     }
+    public async Task<List<Order>> GetAllOrdersByMasterIdAsync(int masterId)  //GET All Orders
+    {
+        return await context.Orders
+            .Include(o => o.OrderTobaccos)
+            .Where(o => o.MasterId == masterId)
+            .ToListAsync();
+    }
+
 
 }

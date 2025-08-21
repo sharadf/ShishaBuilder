@@ -27,3 +27,10 @@ secrets.json
 
 # Publish output
 publish/
+
+# service accounts / credentials
+*service-account*.json
+*credentials*.json
+*.p12
+*.pem
+*.pfx

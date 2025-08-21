@@ -1,6 +1,7 @@
 
 using ShishaBuilder.Core.DTOs.TobaccoDtos;
 using ShishaBuilder.Core.Enums;
+using ShishaBuilder.Core.Helpers;
 using ShishaBuilder.Core.Models;
 
 namespace ShishaBuilder.Core.DTOs.OrderDtos;
@@ -13,6 +14,6 @@ public class OrderDetailsViewModelDto
     public required Hookah Hookah { get; set; }
     public required Table Table { get; set; }
     public Master Master { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } =DateTimeHelper.GetBakuTime() ;
     public OrderStatus OrderStatus { get; set; }
 }
