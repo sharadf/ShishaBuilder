@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ShishaBuilder.Core.Services.StatisticServices;
 
 namespace ShishaBuilder.Web.Controllers;
 
+[Authorize(Roles="Admin")]
 [Route("[controller]")]
 public class StatisticController : Controller
 {
