@@ -10,6 +10,8 @@ public class CreateTobaccoViewModel
     public string? Brand { get; set; }
     public string? Flavor { get; set; }
     public required string Strength { get; set; }
+
+    // public required IFormFile ImageFile { get; set; }
+    public  IFormFile? ImageFile { get; set; }
     
-    public required IFormFile ImageFile { get; set; }
 }

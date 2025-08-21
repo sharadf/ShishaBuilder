@@ -154,7 +154,7 @@ public class OrderService : IOrderService
                 Hookah = hookah,
                 CreatedAt = order.CreatedAt,
                 Tobaccos = tobaccos,
-                Master = null 
+                Master = null
             });
         }
 
@@ -165,15 +165,49 @@ public class OrderService : IOrderService
         var order = await orderRepository.GetOrderByIdAsync(orderId);
         if (order == null)
             return false;
-        
+
         if (order.MasterId != masterId)
             return false;
 
         order.OrderStatus = newStatus;
-       
+
         await context.SaveChangesAsync();
         return true;
     }
 
+    public async Task<List<AllOrdersViewModelDto>> GetAllOrdersByMasterAsync(int masterId)
+    {
+        var orders = await orderRepository.GetAllOrdersByMasterIdAsync(masterId);
 
+        var result = new List<AllOrdersViewModelDto>();
+
+        foreach (var order in orders)
+        {
+            var table = await tableService.GetByIdTableAsync(order.TableId);
+            var hookah = await hookahService.GetByIdHookahAsync(order.HookahId);
+
+            var tobaccos = new List<TobaccoShowInfoViewModelDto>();
+            foreach (var ot in order.OrderTobaccos)
+            {
+                var tobacco = await tobaccoService.GetTobaccoByIdAsync(ot.TobaccoId);
+                tobaccos.Add(new TobaccoShowInfoViewModelDto
+                {
+                    Name = tobacco.Name,
+                    Brand = tobacco.Brand,
+                    Percentage = ot.Percentage
+                });
+            }
+
+            result.Add(new AllOrdersViewModelDto
+            {
+                Id = order.Id,
+                Table = table,
+                Hookah = hookah,
+                CreatedAt = order.CreatedAt,
+                Tobaccos = tobaccos,
+                Master = null
+            });
+        }
+        return result;
+    }
 }

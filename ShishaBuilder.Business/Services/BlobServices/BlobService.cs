@@ -4,55 +4,54 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using ShishaBuilder.Core.Services.BlobServices;
 using ShishaBuilder.Core.Settings;
+using Google.Cloud.Storage.V1;
+using Google.Apis.Auth.OAuth2;
 
 namespace ShishaBuilder.Business.Services.BlobServices;
+
 
 public class BlobService : IBlobService
 {
     private readonly BlobSettings blobSettings;
+    private readonly StorageClient storageClient;
 
     public BlobService(IOptions<BlobSettings> blobSettings)
     {
         this.blobSettings = blobSettings.Value;
+
+        var credential = GoogleCredential.GetApplicationDefault();
+        storageClient = StorageClient.Create(credential);
     }
 
-    public async Task<string> UploadPhotoAsync(IFormFile file, string containerName)
+    public async Task<string> UploadPhotoAsync(IFormFile file, string folderName)
     {
         if (file == null)
             throw new ArgumentException("File cannot be null");
 
-        var blobContainerClient = new BlobContainerClient(
-            blobSettings.ConnectionString,
-            containerName
+        string objectName = $"{folderName}/{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+
+        using var stream = file.OpenReadStream();
+        // Загружаем объект
+        var uploadedObject = await storageClient.UploadObjectAsync(
+            bucket: blobSettings.BucketName,
+            objectName: objectName,
+            contentType: file.ContentType,
+            source: stream
         );
-        await blobContainerClient.CreateIfNotExistsAsync();
 
-        string fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
-        var blobClient = blobContainerClient.GetBlobClient(fileName);
-
-        using (var stream = file.OpenReadStream())
-        {
-            await blobClient.UploadAsync(
-                stream,
-                new BlobHttpHeaders { ContentType = file.ContentType }
-            );
-        }
-
-        return blobClient.Uri.ToString();
+        // Возвращаем прямую ссылку на публичный файл
+        return $"https://storage.googleapis.com/{blobSettings.BucketName}/{objectName}";
     }
 
-    public async Task<List<string>> DownloadAllPhotos(string containerName)
+    public async Task<List<string>> DownloadAllPhotos(string folderName)
     {
-        var blobContainerClient = new BlobContainerClient(
-            blobSettings.ConnectionString,
-            containerName
-        );
         var result = new List<string>();
 
-        await foreach (var blob in blobContainerClient.GetBlobsAsync())
+        await foreach (
+            var obj in storageClient.ListObjectsAsync(blobSettings.BucketName, folderName)
+        )
         {
-            var uri = blobContainerClient.GetBlobClient(blob.Name).Uri.ToString();
-            result.Add(uri);
+            result.Add($"https://storage.googleapis.com/{blobSettings.BucketName}/{obj.Name}");
         }
 
         return result;

@@ -20,5 +20,8 @@ public interface IOrderService
     Task<AllOrdersViewModelDto> GetOrdersViewModelAsync(int orderId);
     Task AssignOrderToMasterAsync(int orderId, int masterId);
     Task<List<AllOrdersViewModelDto>> GetOrdersByMasterAsync(int masterId);
+    Task<List<AllOrdersViewModelDto>> GetAllOrdersByMasterAsync(int masterId);
+
+    
     Task<bool> UpdateOrderStatusAsync(int orderId, int masterId, OrderStatus newStatus);
 }

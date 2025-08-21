@@ -12,7 +12,7 @@ using ShishaBuilder.Core.DB;
 namespace ShishaBuilder.Core.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250517193256_DockerMigration")]
+    [Migration("20250812055916_DockerMigration")]
     partial class DockerMigration
     {
         /// <inheritdoc />

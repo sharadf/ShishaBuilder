@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ShishaBuilder.Core.Settings;
-
-public class BlobSettings
+namespace ShishaBuilder.Core.Settings
 {
-    public string? ConnectionString { get; set; }
+    public class BlobSettings
+    {
+       
+        public string BucketName { get; set; }
+        public string TobaccoFolder { get; set; }
+        public string MasterFolder { get; set; }
+        public string HookahFolder { get; set; }
+    }
 }
